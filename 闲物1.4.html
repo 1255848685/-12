@@ -1,0 +1,1698 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+    <title>闲物 - 闲置二手交易平台</title>
+    <script src="https://cdn.tailwindcss.com">
+    </script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#FFD161',
+                        'primary-dark': '#F0C040',
+                        'primary-light': '#FFF8E1',
+                        'primary-bg': '#FFF9E6',
+                        danger: '#FF4757',
+                        'danger-dark': '#E8394A',
+                        success: '#2ED573',
+                        'text-main': '#222222',
+                        'text-secondary': '#666666',
+                        'text-light': '#999999',
+                        'bg-page': '#F5F5F5',
+                        'card-bg': '#FFFFFF',
+                        'border-light': '#EEEEEE',
+                    },
+                    fontFamily: {
+                        sans: ['-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB',
+                            'Microsoft YaHei', 'Helvetica Neue', 'sans-serif'
+                        ],
+                    },
+                    boxShadow: {
+                        'card': '0 2px 8px rgba(0,0,0,0.04)',
+                        'card-hover': '0 8px 20px rgba(0,0,0,0.10)',
+                        'float': '0 4px 16px rgba(0,0,0,0.06)',
+                        'btn': '0 2px 6px rgba(0,0,0,0.08)',
+                        'nav': '0 -2px 10px rgba(0,0,0,0.04)',
+                    },
+                    borderRadius: {
+                        'xl': '12px',
+                        '2xl': '16px',
+                        '3xl': '20px',
+                        'full': '9999px',
+                    },
+                },
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .text-shadow-sm {
+                text-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+            }
+            .bg-gradient-warm {
+                background: linear-gradient(135deg, #FFD161 0%, #FFE8A0 100%);
+            }
+            .bg-gradient-hot {
+                background: linear-gradient(135deg, #FF6B6B 0%, #FF4757 100%);
+            }
+            .bg-gradient-cool {
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            }
+            .bg-gradient-gold {
+                background: linear-gradient(135deg, #FCD535 0%, #F0B90B 100%);
+            }
+            .bg-gradient-green {
+                background: linear-gradient(135deg, #0ECB81 0%, #06a364 100%);
+            }
+            .bg-gradient-blue {
+                background: linear-gradient(135deg, #3B82F6 0%, #1D4ED8 100%);
+            }
+            .bg-gradient-purple {
+                background: linear-gradient(135deg, #8B5CF6 0%, #6D28D9 100%);
+            }
+            .bg-gradient-rose {
+                background: linear-gradient(135deg, #F43F5E 0%, #BE123C 100%);
+            }
+            .bg-gradient-amber {
+                background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%);
+            }
+            .scrollbar-hide {
+                -ms-overflow-style: none;
+                scrollbar-width: none;
+            }
+            .scrollbar-hide::-webkit-scrollbar {
+                display: none;
+            }
+            .safe-bottom {
+                padding-bottom: calc(8px + env(safe-area-inset-bottom));
+            }
+            .safe-bottom-nav {
+                padding-bottom: env(safe-area-inset-bottom);
+            }
+            .line-clamp-1 {
+                display: -webkit-box;
+                -webkit-line-clamp: 1;
+                -webkit-box-orient: vertical;
+                overflow: hidden;
+            }
+            .line-clamp-2 {
+                display: -webkit-box;
+                -webkit-line-clamp: 2;
+                -webkit-box-orient: vertical;
+                overflow: hidden;
+            }
+            .line-clamp-3 {
+                display: -webkit-box;
+                -webkit-line-clamp: 3;
+                -webkit-box-orient: vertical;
+                overflow: hidden;
+            }
+        }
+
+        :root {
+            --safe-bottom: env(safe-area-inset-bottom, 0px);
+            --golden: #FCD535;
+            --bg-dark: #0B0E11;
+            --card-dark: rgba(30, 35, 41, 0.92);
+            --border-dark: rgba(255, 255, 255, 0.06);
+            --text-gray: #9CA3AF;
+            --accent-green: #0ECB81;
+            --accent-red: #F6465D;
+            --accent-blue: #3B82F6;
+            --accent-purple: #8B5CF6;
+            --accent-amber: #F59E0B;
+            --accent-rose: #F43F5E;
+        }
+        * {
+            -webkit-tap-highlight-color: transparent;
+            -webkit-user-select: none;
+            user-select: none;
+        }
+        input,
+        textarea,
+        select {
+            -webkit-user-select: text;
+            user-select: text;
+        }
+        body {
+            background: #F5F5F5;
+            min-height: 100vh;
+            padding-bottom: calc(70px + var(--safe-bottom));
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB',
+                'Microsoft YaHei', 'Helvetica Neue', sans-serif;
+        }
+        .product-card {
+            transition: transform 0.2s cubic-bezier(0.25, 0.8, 0.25, 1.2), box-shadow 0.2s ease;
+            will-change: transform;
+        }
+        .product-card:active {
+            transform: scale(0.97);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+        .cat-entry {
+            transition: transform 0.15s ease;
+        }
+        .cat-entry:active {
+            transform: scale(0.9);
+        }
+        .cat-entry .cat-icon-wrap {
+            transition: all 0.2s ease;
+        }
+        .cat-entry:active .cat-icon-wrap {
+            transform: scale(0.92);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+        .tab-item {
+            transition: all 0.2s ease;
+            position: relative;
+            white-space: nowrap;
+            cursor: pointer;
+            padding: 8px 14px;
+            font-size: 14px;
+            color: #666;
+            font-weight: 500;
+            border-radius: 20px;
+            flex-shrink: 0;
+        }
+        .tab-item.active {
+            color: #222;
+            font-weight: 700;
+            background: #FFF9E6;
+        }
+        .tab-item:active {
+            transform: scale(0.94);
+        }
+        .bottom-nav-item {
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+        .bottom-nav-item:active {
+            transform: scale(0.9);
+        }
+        .bottom-nav-item .nav-icon {
+            transition: color 0.2s ease;
+        }
+        .bottom-nav-item.active .nav-icon {
+            color: #FFD161;
+        }
+        .bottom-nav-item.active .nav-label {
+            color: #222;
+            font-weight: 700;
+        }
+        .publish-btn-main {
+            transition: all 0.25s cubic-bezier(0.25, 0.8, 0.25, 1.2);
+            box-shadow: 0 4px 16px rgba(255, 71, 87, 0.35);
+        }
+        .publish-btn-main:active {
+            transform: scale(0.9);
+            box-shadow: 0 2px 8px rgba(255, 71, 87, 0.3);
+        }
+        .modal-sheet {
+            animation: sheetUp 0.35s cubic-bezier(0.32, 0.72, 0, 1);
+        }
+        @keyframes sheetUp {
+            from {
+                transform: translateY(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+        .modal-overlay {
+            animation: overlayIn 0.25s ease;
+        }
+        @keyframes overlayIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+        .toast-pop {
+            animation: toastIn 0.35s cubic-bezier(0.32, 0.72, 0, 1), toastOut 0.3s ease 2s forwards;
+        }
+        @keyframes toastIn {
+            from {
+                opacity: 0;
+                transform: translateX(-50%) translateY(-24px) scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(-50%) translateY(0) scale(1);
+            }
+        }
+        @keyframes toastOut {
+            from {
+                opacity: 1;
+                transform: translateX(-50%) translateY(0) scale(1);
+            }
+            to {
+                opacity: 0;
+                transform: translateX(-50%) translateY(-16px) scale(0.9);
+            }
+        }
+        .sold-overlay {
+            background: rgba(0, 0, 0, 0.55);
+            backdrop-filter: blur(2px);
+            -webkit-backdrop-filter: blur(2px);
+        }
+        .btn-tap {
+            transition: all 0.18s ease;
+        }
+        .btn-tap:active {
+            transform: scale(0.95);
+            opacity: 0.85;
+        }
+        .img-preview-item {
+            transition: transform 0.2s ease;
+        }
+        .img-preview-item:hover {
+            transform: scale(1.02);
+        }
+        .tabs-scroll {
+            -webkit-overflow-scrolling: touch;
+            scroll-behavior: smooth;
+        }
+        @keyframes shimmer {
+            0% {
+                background-position: -200px 0;
+            }
+            100% {
+                background-position: 200px 0;
+            }
+        }
+        @keyframes pulse-dot {
+            0%,
+            100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.4;
+            }
+        }
+        .pulse-dot {
+            animation: pulse-dot 1.8s ease-in-out infinite;
+        }
+        .img-container img {
+            transition: transform 0.4s ease;
+        }
+        .img-container:active img {
+            transform: scale(1.05);
+        }
+        .wallet-dark-bg {
+            background: #0B0E11;
+        }
+        .glass-card {
+            background: rgba(30, 35, 41, .92);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, .06);
+            box-shadow: 0 0 30px rgba(252, 213, 53, .08);
+        }
+        .asset-glow {
+            box-shadow: 0 0 40px rgba(252, 213, 53, .18);
+        }
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .animate-fade-in-up {
+            animation: fadeInUp 0.4s ease forwards;
+        }
+        @keyframes bounceIn {
+            0% {
+                transform: scale(0.3);
+                opacity: 0;
+            }
+            50% {
+                transform: scale(1.05);
+            }
+            70% {
+                transform: scale(0.95);
+            }
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+        .animate-bounce-in {
+            animation: bounceIn 0.5s ease forwards;
+        }
+        @keyframes slideInRight {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+        .animate-slide-in-right {
+            animation: slideInRight 0.3s ease forwards;
+        }
+        .star-rating .fa-star {
+            cursor: pointer;
+            transition: color 0.15s ease, transform 0.15s ease;
+        }
+        .star-rating .fa-star:hover {
+            transform: scale(1.2);
+        }
+        .chart-bar {
+            transition: height 0.6s cubic-bezier(0.25, 0.8, 0.25, 1.2);
+        }
+        .notification-dot {
+            animation: pulse-dot 2s ease-in-out infinite;
+        }
+        @keyframes floatUpDown {
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-6px);
+            }
+        }
+        .animate-float {
+            animation: floatUpDown 3s ease-in-out infinite;
+        }
+        .ripple {
+            position: relative;
+            overflow: hidden;
+        }
+        .ripple::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at center, rgba(255, 255, 255, 0.3) 0%, transparent 70%);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .ripple:active::after {
+            opacity: 1;
+            transition: opacity 0s;
+        }
+        .skeleton {
+            background: linear-gradient(90deg, #e5e7eb 25%, #f3f4f6 50%, #e5e7eb 75%);
+            background-size: 200px 100%;
+            animation: shimmer 1.5s infinite;
+        }
+    </style>
+</head>
+<body class="font-sans text-text-main antialiased">
+
+    <!-- ==================== 顶部导航栏 ==================== -->
+    <header class="sticky top-0 z-50 bg-white shadow-sm" style="padding-top:env(safe-area-inset-top,0px);">
+        <div class="flex items-center gap-2.5 px-3 py-2.5">
+            <div class="flex items-center gap-1.5 flex-shrink-0 cursor-pointer btn-tap" onclick="goHome()">
+                <div class="w-7 h-7 bg-gradient-warm rounded-lg flex items-center justify-center shadow-sm">
+                    <i class="fa fa-refresh text-white text-xs font-bold"></i>
+                </div>
+                <span class="text-lg font-extrabold text-text-main tracking-tight">闲物</span>
+            </div>
+            <div class="flex-1 bg-gray-100 rounded-full flex items-center px-3 py-2 gap-2 cursor-pointer btn-tap min-w-0"
+            onclick="document.getElementById('searchInput').focus()">
+            <i class="fa fa-search text-gray-400 text-sm flex-shrink-0"></i>
+            <input type="text" id="searchInput" placeholder="搜闲物好货" class="flex-1 bg-transparent border-none outline-none text-sm text-text-main placeholder-gray-400 min-w-0"
+            onkeydown="if(event.key==='Enter')searchProducts()">
+            <i class="fa fa-camera text-gray-400 text-sm flex-shrink-0 cursor-pointer btn-tap" onclick="showToast('扫码功能开发中')"></i>
+        </div>
+        <div class="flex-shrink-0" id="navBtns">
+            <span id="navGuest">
+                <button class="btn-tap bg-gradient-warm text-text-main px-3.5 py-1.5 rounded-full text-sm font-semibold shadow-sm whitespace-nowrap" onclick="openLoginModal()">登录</button>
+            </span>
+            <span id="navUser" style="display:none;">
+                <div class="btn-tap flex items-center gap-1.5 cursor-pointer" onclick="openWalletPage()">
+                    <div class="w-7 h-7 rounded-full bg-gradient-warm flex items-center justify-center font-bold text-xs text-white shadow-sm overflow-hidden" id="navAvatar">U</div>
+                    <span class="text-xs font-medium text-text-secondary hidden sm:inline" id="navUsername">我</span>
+                </div>
+            </span>
+        </div>
+    </div>
+</header>
+
+<!-- ==================== 搜索历史下拉 ==================== -->
+<div id="searchHistoryDropdown" class="bg-white mx-3 rounded-2xl shadow-float p-3 z-40 relative -mt-1 hidden" style="border-radius:0 0 16px 16px;">
+    <div class="flex items-center justify-between mb-2">
+        <span class="text-xs font-semibold text-text-secondary">搜索历史</span>
+        <span class="text-xs text-primary-dark cursor-pointer btn-tap" onclick="clearSearchHistory()">清空</span>
+    </div>
+    <div id="searchHistoryList" class="flex flex-wrap gap-2"></div>
+</div>
+
+<!-- ==================== 分类快捷入口 ==================== -->
+<div class="bg-white mx-0 mb-2 px-3 py-3">
+    <div class="grid grid-cols-5 gap-y-3 gap-x-1">
+        <div class="cat-entry flex flex-col items-center cursor-pointer" data-cat="all" onclick="filterByCategory('all', this)">
+            <div class="cat-icon-wrap w-11 h-11 rounded-2xl bg-gray-50 flex items-center justify-center text-xl mb-1 shadow-sm"><i class="fa fa-th-large text-gray-600"></i></div>
+            <span class="text-xs text-text-secondary font-medium">全部</span></div>
+            <div class="cat-entry flex flex-col items-center cursor-pointer" data-cat="手机数码" onclick="filterByCategory('手机数码', this)">
+                <div class="cat-icon-wrap w-11 h-11 rounded-2xl bg-blue-50 flex items-center justify-center text-xl mb-1 shadow-sm"><i class="fa fa-mobile text-blue-500"></i></div>
+                <span class="text-xs text-text-secondary font-medium">手机</span></div>
+                <div class="cat-entry flex flex-col items-center cursor-pointer" data-cat="服装鞋帽" onclick="filterByCategory('服装鞋帽', this)">
+                    <div class="cat-icon-wrap w-11 h-11 rounded-2xl bg-pink-50 flex items-center justify-center text-xl mb-1 shadow-sm"><i class="fa fa-female text-pink-500"></i></div>
+                    <span class="text-xs text-text-secondary font-medium">服饰</span></div>
+                    <div class="cat-entry flex flex-col items-center cursor-pointer" data-cat="家具家电" onclick="filterByCategory('家具家电', this)">
+                        <div class="cat-icon-wrap w-11 h-11 rounded-2xl bg-orange-50 flex items-center justify-center text-xl mb-1 shadow-sm"><i class="fa fa-television text-orange-500"></i></div>
+                        <span class="text-xs text-text-secondary font-medium">家电</span></div>
+                        <div class="cat-entry flex flex-col items-center cursor-pointer" data-cat="图书音像" onclick="filterByCategory('图书音像', this)">
+                            <div class="cat-icon-wrap w-11 h-11 rounded-2xl bg-green-50 flex items-center justify-center text-xl mb-1 shadow-sm"><i class="fa fa-book text-green-500"></i></div>
+                            <span class="text-xs text-text-secondary font-medium">图书</span></div>
+                            <div class="cat-entry flex flex-col items-center cursor-pointer" data-cat="美妆护肤" onclick="filterByCategory('美妆护肤', this)">
+                                <div class="cat-icon-wrap w-11 h-11 rounded-2xl bg-purple-50 flex items-center justify-center text-xl mb-1 shadow-sm"><i class="fa fa-diamond text-purple-500"></i></div>
+                                <span class="text-xs text-text-secondary font-medium">美妆</span></div>
+                                <div class="cat-entry flex flex-col items-center cursor-pointer" data-cat="运动户外" onclick="filterByCategory('运动户外', this)">
+                                    <div class="cat-icon-wrap w-11 h-11 rounded-2xl bg-red-50 flex items-center justify-center text-xl mb-1 shadow-sm"><i class="fa fa-futbol-o text-red-500"></i></div>
+                                    <span class="text-xs text-text-secondary font-medium">运动</span></div>
+                                    <div class="cat-entry flex flex-col items-center cursor-pointer" data-cat="母婴用品" onclick="filterByCategory('母婴用品', this)">
+                                        <div class="cat-icon-wrap w-11 h-11 rounded-2xl bg-yellow-50 flex items-center justify-center text-xl mb-1 shadow-sm"><i class="fa fa-child text-yellow-600"></i></div>
+                                        <span class="text-xs text-text-secondary font-medium">母婴</span></div>
+                                        <div class="cat-entry flex flex-col items-center cursor-pointer" data-cat="其他" onclick="filterByCategory('其他', this)">
+                                            <div class="cat-icon-wrap w-11 h-11 rounded-2xl bg-gray-50 flex items-center justify-center text-xl mb-1 shadow-sm"><i class="fa fa-gift text-gray-500"></i></div>
+                                            <span class="text-xs text-text-secondary font-medium">其他</span></div>
+                                            <div class="cat-entry flex flex-col items-center cursor-pointer" onclick="showToast('回收功能开发中')">
+                                                <div class="cat-icon-wrap w-11 h-11 rounded-2xl bg-teal-50 flex items-center justify-center text-xl mb-1 shadow-sm"><i class="fa fa-recycle text-teal-500"></i></div>
+                                                <span class="text-xs text-text-secondary font-medium">回收</span></div>
+                                            </div>
+                                        </div>
+
+                                        <!-- ==================== 特色功能区 ==================== -->
+                                        <div class="px-3 mb-2">
+                                            <div class="flex gap-2 overflow-x-auto scrollbar-hide py-1">
+                                                <div class="flex-shrink-0 bg-gradient-to-r from-amber-400 to-orange-400 text-white rounded-xl px-4 py-2.5 flex items-center gap-2 cursor-pointer btn-tap shadow-sm min-w-0" onclick="showToast('神奇好物功能开发中')">
+                                                    <i class="fa fa-bolt text-lg"></i><span class="text-sm font-semibold whitespace-nowrap">神奇好物</span></div>
+                                                    <div class="flex-shrink-0 bg-gradient-to-r from-blue-400 to-cyan-400 text-white rounded-xl px-4 py-2.5 flex items-center gap-2 cursor-pointer btn-tap shadow-sm" onclick="openChatPage()">
+                                                        <i class="fa fa-comments text-lg"></i><span class="text-sm font-semibold whitespace-nowrap">闲物圈子</span></div>
+                                                        <div class="flex-shrink-0 bg-gradient-to-r from-purple-400 to-pink-400 text-white rounded-xl px-4 py-2.5 flex items-center gap-2 cursor-pointer btn-tap shadow-sm" onclick="showToast('特惠活动开发中')">
+                                                            <i class="fa fa-tag text-lg"></i><span class="text-sm font-semibold whitespace-nowrap">特惠活动</span></div>
+                                                            <div class="flex-shrink-0 bg-gradient-to-r from-green-400 to-emerald-400 text-white rounded-xl px-4 py-2.5 flex items-center gap-2 cursor-pointer btn-tap shadow-sm" onclick="showToast('二手房源开发中')">
+                                                                <i class="fa fa-home text-lg"></i><span class="text-sm font-semibold whitespace-nowrap">二手房源</span></div>
+                                                            </div>
+                                                        </div>
+
+                                                        <!-- ==================== 标签切换栏 ==================== -->
+                                                        <div class="bg-white sticky top-[56px] z-40 border-b border-border-light" style="top:calc(56px + env(safe-area-inset-top,0px));">
+                                                            <div class="tabs-scroll flex gap-0 overflow-x-auto scrollbar-hide px-2 py-1.5" id="tabsContainer">
+                                                                <span class="tab-item active" data-tab="all" onclick="switchTab('all', this)">推荐</span>
+                                                                <span class="tab-item" data-tab="newest" onclick="switchTab('newest', this)">最新</span>
+                                                                <span class="tab-item" data-tab="手机数码" onclick="switchTab('手机数码', this)">数码</span>
+                                                                <span class="tab-item" data-tab="服装鞋帽" onclick="switchTab('服装鞋帽', this)">服饰</span>
+                                                                <span class="tab-item" data-tab="家具家电" onclick="switchTab('家具家电', this)">家电</span>
+                                                                <span class="tab-item" data-tab="美妆护肤" onclick="switchTab('美妆护肤', this)">美妆</span>
+                                                                <span class="tab-item" data-tab="运动户外" onclick="switchTab('运动户外', this)">运动</span>
+                                                                <span class="tab-item" data-tab="图书音像" onclick="switchTab('图书音像', this)">图书</span>
+                                                                <span class="tab-item" data-tab="母婴用品" onclick="switchTab('母婴用品', this)">母婴</span>
+                                                                <span class="tab-item" data-tab="奢侈品" onclick="switchTab('奢侈品', this)">奢品</span>
+                                                                <span class="tab-item" data-tab="数码配件" onclick="switchTab('数码配件', this)">配件</span>
+                                                            </div>
+                                                        </div>
+
+                                                        <!-- ==================== 商品列表区 ==================== -->
+                                                        <div class="main-content px-3 py-3">
+                                                            <div class="flex items-center justify-between mb-3">
+                                                                <h2 class="text-base font-bold text-text-main flex items-center gap-1.5" id="listTitle">
+                                                                    <i class="fa fa-shopping-bag text-primary-dark"></i><span>推荐宝贝</span></h2>
+                                                                    <div class="flex items-center gap-3 text-xs text-text-light">
+                                                                        <span class="cursor-pointer hover:text-text-main transition" onclick="sortProducts('default')">综合</span>
+                                                                        <span class="cursor-pointer hover:text-text-main transition" onclick="sortProducts('newest')">最新</span>
+                                                                        <span class="cursor-pointer hover:text-text-main transition" onclick="sortProducts('price')">价格↕</span>
+                                                                        <span class="cursor-pointer hover:text-text-main transition" onclick="sortProducts('hot')">热度</span>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="product-grid grid grid-cols-2 gap-3" id="productGrid"></div>
+                                                                <div id="loadMoreBtn" class="text-center py-4 hidden">
+                                                                    <button class="btn-tap bg-white border border-gray-200 text-text-secondary px-6 py-2.5 rounded-full text-sm font-medium hover:bg-gray-50 transition" onclick="loadMoreProducts()">加载更多</button>
+                                                                </div>
+                                                            </div>
+
+                                                            <!-- ==================== 底部导航栏 ==================== -->
+                                                            <nav class="fixed bottom-0 left-0 w-full bg-white border-t border-border-light z-50 safe-bottom-nav shadow-nav">
+                                                                <div class="flex justify-around items-center py-1.5 relative">
+                                                                    <div class="bottom-nav-item flex flex-col items-center gap-0.5 cursor-pointer active" id="navHome" onclick="goHome()">
+                                                                        <i class="fa fa-home text-xl nav-icon" style="color:#FFD161;"></i><span class="text-xs nav-label font-bold text-text-main">首页</span></div>
+                                                                        <div class="bottom-nav-item flex flex-col items-center gap-0.5 cursor-pointer" id="navDiscover" onclick="openDiscoverPage()">
+                                                                            <i class="fa fa-compass text-xl nav-icon text-gray-400"></i><span class="text-xs nav-label text-gray-400">发现</span></div>
+                                                                            <div class="flex flex-col items-center cursor-pointer relative" style="margin-top:-20px;" onclick="openPublishModal()">
+                                                                                <div class="publish-btn-main w-13 h-13 bg-gradient-hot rounded-full flex items-center justify-center text-white text-2xl shadow-lg" style="width:50px;height:50px;"><i class="fa fa-plus"></i></div>
+                                                                                <span class="text-xs font-semibold text-text-secondary mt-0.5">发布</span></div>
+                                                                                <div class="bottom-nav-item flex flex-col items-center gap-0.5 cursor-pointer" id="navMsg" onclick="openChatPage()">
+                                                                                    <i class="fa fa-comment-o text-xl nav-icon text-gray-400"></i><span class="text-xs nav-label text-gray-400">消息</span>
+                                                                                    <span class="absolute top-0 right-1/3 w-2 h-2 bg-danger rounded-full pulse-dot" id="msgDot"></span></div>
+                                                                                    <div class="bottom-nav-item flex flex-col items-center gap-0.5 cursor-pointer" id="navProfile" onclick="openProfileModal()">
+                                                                                        <i class="fa fa-user-o text-xl nav-icon text-gray-400"></i><span class="text-xs nav-label text-gray-400">资产</span></div>
+                                                                                    </div>
+                                                                                </nav>
+
+                                                                                <!-- ==================== 登录弹窗 ==================== -->
+                                                                                <div class="modal-overlay fixed inset-0 bg-black/50 z-[200] flex items-end justify-center" id="loginModal" style="display:none;">
+                                                                                    <div class="modal-sheet bg-white rounded-t-3xl w-full max-w-md max-h-[85vh] overflow-y-auto p-5 pb-8 relative">
+                                                                                        <button class="close-btn absolute top-3 right-3 w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-gray-500 hover:bg-gray-200 transition z-10 btn-tap" onclick="closeModal('loginModal')"><i class="fa fa-times"></i></button>
+                                                                                        <h2 class="text-xl font-bold text-center mb-5 mt-2">🔑 登录闲物</h2>
+                                                                                        <div class="alert alert-error bg-red-50 text-red-500 p-3 rounded-xl mb-3 text-sm" id="loginError" style="display:none;"></div>
+                                                                                        <div class="mb-3"><label class="block text-sm font-medium text-text-secondary mb-1.5">用户名</label>
+                                                                                            <input type="text" id="loginUsername" placeholder="请输入用户名" class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary-dark transition bg-gray-50"></div>
+                                                                                            <div class="mb-5"><label class="block text-sm font-medium text-text-secondary mb-1.5">密码</label>
+                                                                                                <input type="password" id="loginPassword" placeholder="请输入密码" class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary-dark transition bg-gray-50"></div>
+                                                                                                <button class="btn-tap bg-gray-900 text-white w-full py-3.5 rounded-full font-semibold text-base shadow-btn hover:bg-gray-800 transition" onclick="login()">登 录</button>
+                                                                                                <p class="text-center mt-4 text-sm text-text-light">还没有账号？<span class="text-gray-800 cursor-pointer font-semibold" onclick="switchToRegister()">立即注册</span></p>
+                                                                                                <p class="text-center mt-2 text-xs text-gray-400">测试账号: test / 123456</p>
+                                                                                            </div>
+                                                                                        </div>
+
+                                                                                        <!-- ==================== 注册弹窗 ==================== -->
+                                                                                        <div class="modal-overlay fixed inset-0 bg-black/50 z-[200] flex items-end justify-center" id="registerModal" style="display:none;">
+                                                                                            <div class="modal-sheet bg-white rounded-t-3xl w-full max-w-md max-h-[85vh] overflow-y-auto p-5 pb-8 relative">
+                                                                                                <button class="close-btn absolute top-3 right-3 w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-gray-500 hover:bg-gray-200 transition z-10 btn-tap" onclick="closeModal('registerModal')"><i class="fa fa-times"></i></button>
+                                                                                                <h2 class="text-xl font-bold text-center mb-5 mt-2">📝 注册账号</h2>
+                                                                                                <div class="alert alert-error bg-red-50 text-red-500 p-3 rounded-xl mb-3 text-sm" id="registerError" style="display:none;"></div>
+                                                                                                <div class="mb-3"><label class="block text-sm font-medium text-text-secondary mb-1.5">用户名 *</label><input type="text" id="regUsername" placeholder="3-16个字符" class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary-dark transition bg-gray-50"></div>
+                                                                                                <div class="mb-3"><label class="block text-sm font-medium text-text-secondary mb-1.5">昵称</label><input type="text" id="regNickname" placeholder="给自己起个昵称" class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary-dark transition bg-gray-50"></div>
+                                                                                                <div class="mb-3"><label class="block text-sm font-medium text-text-secondary mb-1.5">密码 *</label><input type="password" id="regPassword" placeholder="至少6位密码" class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary-dark transition bg-gray-50"></div>
+                                                                                                <div class="mb-5"><label class="block text-sm font-medium text-text-secondary mb-1.5">确认密码 *</label><input type="password" id="regPassword2" placeholder="再次输入密码" class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary-dark transition bg-gray-50"></div>
+                                                                                                <button class="btn-tap bg-gray-900 text-white w-full py-3.5 rounded-full font-semibold text-base shadow-btn hover:bg-gray-800 transition" onclick="register()">注 册</button>
+                                                                                                <p class="text-center mt-4 text-sm text-text-light">已有账号？<span class="text-gray-800 cursor-pointer font-semibold" onclick="switchToLogin()">去登录</span></p>
+                                                                                            </div>
+                                                                                        </div>
+
+                                                                                        <!-- ==================== 发布商品弹窗 ==================== -->
+                                                                                        <div class="modal-overlay fixed inset-0 bg-black/50 z-[200] flex items-end justify-center" id="publishModal" style="display:none;">
+                                                                                            <div class="modal-sheet bg-white rounded-t-3xl w-full max-w-md max-h-[85vh] overflow-y-auto p-5 pb-8 relative">
+                                                                                                <button class="close-btn absolute top-3 right-3 w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-gray-500 hover:bg-gray-200 transition z-10 btn-tap" onclick="closeModal('publishModal')"><i class="fa fa-times"></i></button>
+                                                                                                <h2 class="text-xl font-bold text-center mb-5 mt-2">📦 发布闲置</h2>
+                                                                                                <div class="alert alert-error bg-red-50 text-red-500 p-3 rounded-xl mb-3 text-sm" id="publishError" style="display:none;"></div>
+                                                                                                <div class="mb-3"><label class="block text-sm font-medium text-text-secondary mb-1.5">商品图片 <span class="text-xs text-gray-400">(最多5张)</span></label>
+                                                                                                    <div class="image-preview-grid grid grid-cols-3 gap-2 mb-2" id="imagePreviewGrid"></div>
+                                                                                                    <div class="image-upload-area border-2 border-dashed border-gray-200 rounded-xl p-5 text-center cursor-pointer bg-gray-50 btn-tap" id="imageUploadArea" onclick="document.getElementById('imageInput').click()"><i class="fa fa-camera text-3xl text-gray-400 block mb-1.5"></i><span class="text-sm text-gray-500">点击上传图片</span></div>
+                                                                                                    <input type="file" id="imageInput" accept="image/*" multiple style="display:none;" onchange="handleImageUpload(event)"></div>
+                                                                                                    <div class="mb-3"><label class="block text-sm font-medium text-text-secondary mb-1.5">商品名称 *</label><input type="text" id="pubTitle" placeholder="宝贝标题" class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary-dark transition bg-gray-50"></div>
+                                                                                                    <div class="mb-3"><label class="block text-sm font-medium text-text-secondary mb-1.5">分类 *</label><select id="pubCategory" class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary-dark transition appearance-none bg-gray-50"><option value="">请选择</option><option>手机数码</option><option>服装鞋帽</option><option>家具家电</option><option>图书音像</option><option>美妆护肤</option><option>运动户外</option><option>母婴用品</option><option>奢侈品</option><option>数码配件</option><option>其他</option></select></div>
+                                                                                                    <div class="mb-3"><label class="block text-sm font-medium text-text-secondary mb-1.5">价格 (元) *</label><input type="number" id="pubPrice" placeholder="0.00" step="0.01" class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary-dark transition bg-gray-50"></div>
+                                                                                                    <div class="mb-3"><label class="block text-sm font-medium text-text-secondary mb-1.5">成色</label><select id="pubCondition" class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary-dark transition appearance-none bg-gray-50"><option value="全新">全新</option><option value="99新">99新</option><option value="95新">95新</option><option value="9成新">9成新</option><option value="8成新">8成新</option><option value="轻微使用">轻微使用</option></select></div>
+                                                                                                    <div class="mb-5"><label class="block text-sm font-medium text-text-secondary mb-1.5">描述</label><textarea id="pubDesc" placeholder="描述一下宝贝..." rows="3" class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary-dark transition resize-none bg-gray-50"></textarea></div>
+                                                                                                    <button class="btn-tap bg-gradient-hot text-white w-full py-3.5 rounded-full font-semibold text-base shadow-btn hover:shadow-lg transition" onclick="publishProduct()">发布宝贝</button>
+                                                                                                </div>
+                                                                                            </div>
+
+                                                                                            <!-- ==================== 商品详情弹窗 ==================== -->
+                                                                                            <div class="modal-overlay fixed inset-0 bg-black/50 z-[200] flex items-end justify-center" id="detailModal" style="display:none;">
+                                                                                                <div class="modal-sheet bg-white rounded-t-3xl w-full max-w-md max-h-[88vh] overflow-y-auto p-0 relative">
+                                                                                                    <button class="close-btn absolute top-3 right-3 w-9 h-9 rounded-full bg-black/35 flex items-center justify-center text-white hover:bg-black/50 transition z-20 btn-tap" onclick="closeModal('detailModal')"><i class="fa fa-times"></i></button>
+                                                                                                    <div class="detail-img-area w-full h-64 relative bg-gray-100 overflow-hidden" id="detailImgArea"></div>
+                                                                                                    <div class="detail-info p-5">
+                                                                                                        <h3 id="detailTitle" class="text-lg font-bold mb-2 leading-snug"></h3>
+                                                                                                        <div class="detail-price text-3xl font-extrabold text-danger mb-3">¥<span id="detailPrice">0</span></div>
+                                                                                                        <div class="detail-meta flex gap-3 text-xs text-text-light mb-3 flex-wrap">
+                                                                                                            <span class="bg-gray-100 px-2 py-1 rounded-full"><i class="fa fa-folder-o mr-1"></i><span id="detailCategory"></span></span>
+                                                                                                            <span class="bg-gray-100 px-2 py-1 rounded-full"><i class="fa fa-user-o mr-1"></i><span id="detailSeller"></span></span>
+                                                                                                            <span class="bg-gray-100 px-2 py-1 rounded-full"><i class="fa fa-clock-o mr-1"></i><span id="detailDate"></span></span>
+                                                                                                            <span class="bg-gray-100 px-2 py-1 rounded-full"><i class="fa fa-tag mr-1"></i><span id="detailCondition"></span></span>
+                                                                                                        </div>
+                                                                                                        <div class="detail-desc bg-gray-50 p-4 rounded-xl text-text-secondary leading-relaxed whitespace-pre-wrap text-sm" id="detailDesc"></div>
+                                                                                                        <div class="detail-actions flex gap-3 mt-5" id="detailActions"></div>
+                                                                                                        <div class="mt-4 pt-4 border-t border-gray-100" id="detailReviews"></div>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                            </div>
+
+                                                                                            <!-- ==================== 个人中心弹窗 ==================== -->
+                                                                                            <div class="modal-overlay fixed inset-0 bg-black/50 z-[200] flex items-end justify-center" id="profileModal" style="display:none;">
+                                                                                                <div class="modal-sheet bg-white rounded-t-3xl w-full max-w-md max-h-[85vh] overflow-y-auto p-5 pb-8 relative">
+                                                                                                    <button class="close-btn absolute top-3 right-3 w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-gray-500 hover:bg-gray-200 transition z-10 btn-tap" onclick="closeModal('profileModal')"><i class="fa fa-times"></i></button>
+                                                                                                    <div class="profile-header flex items-center gap-4 mb-5 mt-1">
+                                                                                                        <div class="w-16 h-16 rounded-full bg-gradient-warm flex items-center justify-center text-2xl font-bold text-white shadow-md overflow-hidden flex-shrink-0" id="profileAvatar">U</div>
+                                                                                                        <div><h3 id="profileName" class="text-lg font-bold">用户</h3><span class="text-sm text-text-light">@<span id="profileUsername">user</span></span>
+                                                                                                            <div class="flex items-center gap-1 mt-1"><span class="text-xs text-amber-500">★★★★★</span><span class="text-xs text-text-light" id="profileRating">5.0</span></div>
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                    <div class="profile-tabs flex border-b border-gray-200 mb-3 gap-0">
+                                                                                                        <span class="profile-tab px-5 py-2.5 cursor-pointer text-sm font-semibold text-text-main border-b-2 border-gray-900 -mb-px active-tab" onclick="switchProfileTab('buy', this)">我买到的</span>
+                                                                                                        <span class="profile-tab px-5 py-2.5 cursor-pointer text-sm font-medium text-text-light border-b-2 border-transparent -mb-px" onclick="switchProfileTab('sell', this)">我发布的</span>
+                                                                                                        <span class="profile-tab px-5 py-2.5 cursor-pointer text-sm font-medium text-text-light border-b-2 border-transparent -mb-px" onclick="switchProfileTab('collect', this)">收藏夹</span>
+                                                                                                    </div>
+                                                                                                    <div id="profileTabContent" style="max-height:280px;overflow-y:auto;" class="scrollbar-hide"></div>
+                                                                                                    <button class="btn-tap border border-gray-300 text-text-secondary w-full py-3 rounded-full font-medium mt-4 hover:bg-gray-50 transition" onclick="logout()">退出登录</button>
+                                                                                                </div>
+                                                                                            </div>
+
+                                                                                            <!-- ==================== 高级资产中心 ==================== -->
+                                                                                            <div id="walletPage" class="wallet-dark-bg fixed inset-0 z-[120] overflow-y-auto text-white" style="display:none;">
+                                                                                                <div class="px-5 pt-14 pb-8 bg-gradient-to-br from-[#1E2329] to-[#0B0E11]">
+                                                                                                    <div class="flex items-center justify-between mb-6">
+                                                                                                        <div><div class="text-gray-400 text-sm">总资产</div><div class="text-4xl font-extrabold mt-2">¥<span id="walletBalance">12845.00</span></div><div class="text-[#0ECB81] mt-2 text-sm">今日收益 +¥230</div></div>
+                                                                                                        <div class="w-16 h-16 rounded-3xl bg-[#FCD535] flex items-center justify-center text-black text-3xl asset-glow"><i class="fa fa-diamond"></i></div>
+                                                                                                    </div>
+                                                                                                    <div class="glass-card rounded-3xl p-5">
+                                                                                                        <div class="flex justify-between items-center">
+                                                                                                            <div><div class="text-gray-400 text-sm">可用余额</div><div class="text-3xl font-bold mt-2">¥<span id="walletAvailable">12845.00</span></div></div>
+                                                                                                            <div class="text-right"><div class="text-gray-400 text-sm">冻结金额</div><div class="text-xl font-bold text-[#F6465D] mt-2">¥520</div></div>
+                                                                                                        </div>
+                                                                                                        <div class="grid grid-cols-4 gap-3 mt-6 text-center">
+                                                                                                            <div onclick="rechargeBalance()" class="cursor-pointer"><div class="w-14 h-14 rounded-2xl mx-auto bg-[#0ECB81]/20 flex items-center justify-center text-[#0ECB81] text-2xl"><i class="fa fa-plus"></i></div><div class="mt-2 text-sm">充值</div></div>
+                                                                                                            <div onclick="withdrawBalance()" class="cursor-pointer"><div class="w-14 h-14 rounded-2xl mx-auto bg-[#F6465D]/20 flex items-center justify-center text-[#F6465D] text-2xl"><i class="fa fa-arrow-up"></i></div><div class="mt-2 text-sm">提现</div></div>
+                                                                                                            <div onclick="showToast('转账功能已开启')" class="cursor-pointer"><div class="w-14 h-14 rounded-2xl mx-auto bg-[#FCD535]/20 flex items-center justify-center text-[#FCD535] text-2xl"><i class="fa fa-exchange"></i></div><div class="mt-2 text-sm">转账</div></div>
+                                                                                                            <div onclick="showToast('账单功能已开启')" class="cursor-pointer"><div class="w-14 h-14 rounded-2xl mx-auto bg-[#3B82F6]/20 flex items-center justify-center text-[#3B82F6] text-2xl"><i class="fa fa-file-text"></i></div><div class="mt-2 text-sm">账单</div></div>
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                    <div class="glass-card rounded-3xl p-5 mt-4">
+                                                                                                        <h3 class="text-sm font-semibold text-gray-400 mb-3">资产走势</h3>
+                                                                                                        <div class="flex items-end gap-1 h-20" id="assetChart"></div>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                                <div class="px-5 mt-6 pb-32">
+                                                                                                    <div class="flex items-center justify-between mb-4"><h2 class="text-xl font-bold">最近交易</h2><span class="text-gray-400 text-sm">实时更新</span></div>
+                                                                                                    <div id="transactionList" class="space-y-3">
+                                                                                                        <div class="glass-card rounded-2xl p-4 flex items-center justify-between"><div class="flex items-center gap-3"><div class="w-12 h-12 rounded-xl bg-[#0ECB81]/20 flex items-center justify-center text-[#0ECB81]"><i class="fa fa-shopping-bag"></i></div><div><div class="font-semibold">购买 iPhone 14 Pro</div><div class="text-sm text-gray-400">今天 14:22</div></div></div><div class="text-[#F6465D] font-bold">-¥5299</div></div>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                                <div onclick="closeWalletPage()" class="fixed top-5 left-5 w-11 h-11 rounded-full bg-white/10 backdrop-blur-xl flex items-center justify-center text-white border border-white/10 cursor-pointer btn-tap"><i class="fa fa-arrow-left"></i></div>
+                                                                                            </div>
+
+                                                                                            <!-- ==================== 聊天页面 ==================== -->
+                                                                                            <div id="chatPage" class="fixed inset-0 z-[130] bg-white overflow-y-auto" style="display:none;">
+                                                                                                <div class="sticky top-0 bg-white z-10 px-4 py-3 border-b border-gray-100 flex items-center gap-3" style="padding-top:env(safe-area-inset-top,0px);">
+                                                                                                    <button class="btn-tap w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center" onclick="closeChatPage()"><i class="fa fa-arrow-left text-gray-600"></i></button>
+                                                                                                    <span class="font-bold text-lg">消息中心</span>
+                                                                                                    <span class="ml-auto text-xs bg-red-500 text-white px-2 py-0.5 rounded-full">3条未读</span>
+                                                                                                </div>
+                                                                                                <div class="px-4 py-3 space-y-3" id="chatList">
+                                                                                                    <div class="flex items-center gap-3 p-3 bg-gray-50 rounded-2xl cursor-pointer btn-tap"><div class="w-12 h-12 rounded-full bg-gradient-blue flex items-center justify-center text-white font-bold">小</div><div class="flex-1"><div class="font-semibold text-sm">小明同学</div><div class="text-xs text-gray-400 mt-0.5">好的，明天发货</div></div><span class="text-xs text-gray-400">14:22</span></div>
+                                                                                                    <div class="flex items-center gap-3 p-3 bg-gray-50 rounded-2xl cursor-pointer btn-tap"><div class="w-12 h-12 rounded-full bg-gradient-purple flex items-center justify-center text-white font-bold">花</div><div class="flex-1"><div class="font-semibold text-sm">花花姑娘</div><div class="text-xs text-gray-400 mt-0.5">可以便宜一点吗？</div></div><span class="text-xs text-gray-400">昨天</span></div>
+                                                                                                </div>
+                                                                                            </div>
+
+                                                                                            <!-- ==================== 发现页面 ==================== -->
+                                                                                            <div id="discoverPage" class="fixed inset-0 z-[130] bg-bg-page overflow-y-auto" style="display:none;">
+                                                                                                <div class="sticky top-0 bg-white z-10 px-4 py-3 border-b border-gray-100 flex items-center gap-3" style="padding-top:env(safe-area-inset-top,0px);">
+                                                                                                    <button class="btn-tap w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center" onclick="closeDiscoverPage()"><i class="fa fa-arrow-left text-gray-600"></i></button>
+                                                                                                    <span class="font-bold text-lg">发现精彩</span>
+                                                                                                </div>
+                                                                                                <div class="px-4 py-4 space-y-4">
+                                                                                                    <div class="bg-white rounded-2xl p-4 shadow-card"><h3 class="font-bold mb-2">🔥 热门话题</h3><div class="flex flex-wrap gap-2"><span class="bg-red-50 text-red-500 px-3 py-1 rounded-full text-xs">#闲置数码</span><span class="bg-blue-50 text-blue-500 px-3 py-1 rounded-full text-xs">#穿搭分享</span><span class="bg-green-50 text-green-500 px-3 py-1 rounded-full text-xs">#好物推荐</span><span class="bg-purple-50 text-purple-500 px-3 py-1 rounded-full text-xs">#省钱攻略</span></div></div>
+                                                                                                </div>
+                                                                                            </div>
+
+                                                                                            <!-- ==================== 评价弹窗 ==================== -->
+                                                                                            <div class="modal-overlay fixed inset-0 bg-black/50 z-[250] flex items-end justify-center" id="reviewModal" style="display:none;">
+                                                                                                <div class="modal-sheet bg-white rounded-t-3xl w-full max-w-md p-5 pb-8 relative">
+                                                                                                    <button class="close-btn absolute top-3 right-3 w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-gray-500 btn-tap" onclick="closeModal('reviewModal')"><i class="fa fa-times"></i></button>
+                                                                                                    <h2 class="text-xl font-bold text-center mb-4 mt-2">⭐ 评价交易</h2>
+                                                                                                    <div class="star-rating text-center text-3xl mb-4" id="starRating"></div>
+                                                                                                    <textarea id="reviewText" placeholder="写下你的评价..." rows="3" class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/40 resize-none bg-gray-50 mb-4"></textarea>
+                                                                                                    <button class="btn-tap bg-gradient-warm text-text-main w-full py-3.5 rounded-full font-semibold" onclick="submitReview()">提交评价</button>
+                                                                                                </div>
+                                                                                            </div>
+
+                                                                                            <!-- Toast容器 -->
+                                                                                            <div id="toastContainer" class="fixed top-16 left-1/2 transform -translate-x-1/2 z-[999] pointer-events-none"></div>
+
+                                                                                            <script>
+                                                                                                const STORAGE_KEY = 'xianwu_v5_enhanced';
+                                                                                                const PRODUCT_IMAGES = {
+                                                                                                    'p001': 'https://picsum.photos/seed/iphone14pro/400/400',
+                                                                                                    'p002': 'https://picsum.photos/seed/jacket2024/400/400',
+                                                                                                    'p003': 'https://picsum.photos/seed/dysonv10/400/400',
+                                                                                                    'p004': 'https://picsum.photos/seed/threebody/400/400',
+                                                                                                    'p005': 'https://picsum.photos/seed/lancome100/400/400',
+                                                                                                    'p006': 'https://picsum.photos/seed/applewatch9/400/400',
+                                                                                                    'p007': 'https://picsum.photos/seed/nikepegasus/400/400',
+                                                                                                    'p008': 'https://picsum.photos/seed/babystroller/400/400',
+                                                                                                    'p009': 'https://picsum.photos/seed/sonyxm5/400/400',
+                                                                                                    'p010': 'https://picsum.photos/seed/ceramicvase/400/400',
+                                                                                                    'p011': 'https://picsum.photos/seed/huaweiwatch4/400/400',
+                                                                                                    'p012': 'https://picsum.photos/seed/chaichong/400/400',
+                                                                                                    'p013': 'https://picsum.photos/seed/macbookair/400/400',
+                                                                                                    'p014': 'https://picsum.photos/seed/guccibag/400/400',
+                                                                                                    'p015': 'https://picsum.photos/seed/airpodspro/400/400',
+                                                                                                    'p016': 'https://picsum.photos/seed/canonr6/400/400',
+                                                                                                    'p017': 'https://picsum.photos/seed/rolexwatch/400/400',
+                                                                                                    'p018': 'https://picsum.photos/seed/legohouse/400/400',
+                                                                                                    'p019': 'https://picsum.photos/seed/yeezyshoe/400/400',
+                                                                                                    'p020': 'https://picsum.photos/seed/switcholed/400/400',
+                                                                                                    'p021': 'https://picsum.photos/seed/chanelperfume/400/400',
+                                                                                                    'p022': 'https://picsum.photos/seed/boschdrill/400/400',
+                                                                                                    'p023': 'https://picsum.photos/seed/montblancpen/400/400',
+                                                                                                    'p024': 'https://picsum.photos/seed/kindlepaper/400/400',
+                                                                                                    'p025': 'https://picsum.photos/seed/northfacejacket/400/400',
+                                                                                                    'p026': 'https://picsum.photos/seed/djiDrone/400/400',
+                                                                                                    'p027': 'https://picsum.photos/seed/hermesScarf/400/400',
+                                                                                                    'p028': 'https://picsum.photos/seed/ps5Console/400/400',
+                                                                                                    'p029': 'https://picsum.photos/seed/tiffanyNecklace/400/400',
+                                                                                                    'p030': 'https://picsum.photos/seed/robotVacuum/400/400'
+                                                                                                };
+
+                                                                                                let uploadedImages = [];
+                                                                                                let currentSort = 'default';
+                                                                                                let searchHistory = [];
+                                                                                                let collectList = [];
+                                                                                                let reviewData = {};
+                                                                                                let currentReviewProductId = null;
+                                                                                                let currentRating = 5;
+                                                                                                const PRODUCTS_PER_PAGE = 12;
+                                                                                                let currentPage = 1;
+
+                                                                                                function getDefaultData() {
+                                                                                                    const now = Date.now();
+                                                                                                    const d = 86400000;
+                                                                                                    return {
+                                                                                                        users: {
+                                                                                                            'test': { username: 'test', password: '123456',
+                                                                                                                nickname: '测试用户', createdAt: now - d * 30,
+                                                                                                            avatar: '', reputation: 4.8 },
+                                                                                                            'xiaoming': { username: 'xiaoming', password: '123456',
+                                                                                                                nickname: '小明同学', createdAt: now - d * 20,
+                                                                                                            avatar: '', reputation: 4.9 },
+                                                                                                            'huahua': { username: 'huahua', password: '123456',
+                                                                                                                nickname: '花花姑娘', createdAt: now - d * 15,
+                                                                                                            avatar: '', reputation: 4.7 },
+                                                                                                            'chaichong': { username: 'chaichong', password: '123456',
+                                                                                                                nickname: '柴渣虫', createdAt: now - d * 40,
+                                                                                                            avatar: '', reputation: 4.6 },
+                                                                                                            'dashu': { username: 'dashu', password: '123456',
+                                                                                                                nickname: '数码大叔', createdAt: now - d * 25,
+                                                                                                            avatar: '', reputation: 4.9 },
+                                                                                                            'mama': { username: 'mama', password: '123456',
+                                                                                                                nickname: '辣妈达人', createdAt: now - d * 18,
+                                                                                                            avatar: '', reputation: 4.5 }
+                                                                                                        },
+                                                                                                        products: [
+                                                                                                            { id: 'p001', title: 'iPhone 14 Pro 256GB 暗紫色 99新',
+                                                                                                                category: '手机数码', price: 5299,
+                                                                                                                description: '去年买的，一直带壳贴膜，无划痕，电池92%，换新机转让。配件齐全带原装盒子。',
+                                                                                                                seller: 'xiaoming', createdAt: now - d * 3, sold: false,
+                                                                                                                images: [PRODUCT_IMAGES.p001], wantCount: 34,
+                                                                                                                condition: '99新', tags: ['苹果', '旗舰机'] },
+                                                                                                            { id: 'p002', title: '优衣库羽绒服 男款XL码 只穿两次 包邮',
+                                                                                                                category: '服装鞋帽', price: 159,
+                                                                                                                description: '藏青色，充绒足，很暖和。尺码买大了，适合175-180。',
+                                                                                                                seller: 'test', createdAt: now - d * 5, sold: false,
+                                                                                                                images: [PRODUCT_IMAGES.p002], wantCount: 12,
+                                                                                                                condition: '95新', tags: ['冬季', '保暖'] },
+                                                                                                            { id: 'p003', title: '戴森V10吸尘器 全套配件 九成新',
+                                                                                                                category: '家具家电', price: 1280,
+                                                                                                                description: '功能完好，吸力强劲，送备用滤网。',
+                                                                                                                seller: 'huahua', createdAt: now - d * 7, sold: true,
+                                                                                                                buyer: 'test', soldAt: now - d, images: [PRODUCT_IMAGES
+                                                                                                                    .p003
+                                                                                                                ], wantCount: 56, condition: '9成新',
+                                                                                                            tags: ['清洁', '家用'] },
+                                                                                                            { id: 'p004', title: '《三体》全套精装版 轻微磨损',
+                                                                                                                category: '图书音像', price: 45,
+                                                                                                                description: '内页完好，无笔记。科幻迷必入。',
+                                                                                                                seller: 'xiaoming', createdAt: now - d * 10,
+                                                                                                                sold: false, images: [PRODUCT_IMAGES.p004],
+                                                                                                                wantCount: 8, condition: '轻微使用',
+                                                                                                            tags: ['科幻', '精装'] },
+                                                                                                            { id: 'p005', title: '兰蔻小黑瓶100ml 全新未拆',
+                                                                                                                category: '美妆护肤', price: 680,
+                                                                                                                description: '朋友送的礼物，全新未拆封。专柜正品。',
+                                                                                                                seller: 'huahua', createdAt: now - d * 2, sold: false,
+                                                                                                                images: [PRODUCT_IMAGES.p005], wantCount: 22,
+                                                                                                                condition: '全新', tags: ['护肤', '精华'] },
+                                                                                                            { id: 'p006', title: 'Apple Watch S9 45mm GPS 屏幕完美',
+                                                                                                                category: '手机数码', price: 1899,
+                                                                                                                description: '屏幕无划痕，表带轻微使用痕迹，送充电器。',
+                                                                                                                seller: 'test', createdAt: now - d * 4, sold: false,
+                                                                                                                images: [PRODUCT_IMAGES.p006], wantCount: 41,
+                                                                                                                condition: '99新', tags: ['苹果', '智能手表'] },
+                                                                                                            { id: 'p007', title: 'Nike Pegasus 跑鞋 42码 只跑几次',
+                                                                                                                category: '运动户外', price: 220,
+                                                                                                                description: '跑过几次，鞋底磨损小，尺码正。',
+                                                                                                                seller: 'xiaoming', createdAt: now - d * 6,
+                                                                                                                sold: false, images: [PRODUCT_IMAGES.p007],
+                                                                                                                wantCount: 15, condition: '95新',
+                                                                                                            tags: ['跑步', '耐克'] },
+                                                                                                            { id: 'p008', title: '婴儿推车 可折叠伞车 九成新',
+                                                                                                                category: '母婴用品', price: 199,
+                                                                                                                description: '可坐可躺，轻便折叠。带遮阳篷。',
+                                                                                                                seller: 'huahua', createdAt: now - d * 8, sold: true,
+                                                                                                                buyer: 'xiaoming', soldAt: now - d * 2,
+                                                                                                                images: [PRODUCT_IMAGES.p008], wantCount: 19,
+                                                                                                                condition: '9成新', tags: ['婴儿', '出行'] },
+                                                                                                            { id: 'p009', title: '索尼XM5降噪耳机 银色 音质超棒',
+                                                                                                                category: '手机数码', price: 1350,
+                                                                                                                description: '音质超棒，降噪一流，保养好。',
+                                                                                                                seller: 'test', createdAt: now - d * 1, sold: false,
+                                                                                                                images: [PRODUCT_IMAGES.p009], wantCount: 28,
+                                                                                                                condition: '99新', tags: ['耳机', '降噪'] },
+                                                                                                            { id: 'p010', title: '手工陶瓷花瓶 复古摆件 高25cm',
+                                                                                                                category: '其他', price: 68,
+                                                                                                                description: '手工制作，独特纹理。适合客厅装饰。',
+                                                                                                                seller: 'huahua', createdAt: now - d * 9,
+                                                                                                                sold: false, images: [PRODUCT_IMAGES.p010],
+                                                                                                                wantCount: 6, condition: '全新', tags: ['装饰',
+                                                                                                                    '手工'
+                                                                                                                ] },
+                                                                                                            { id: 'p011', title: '华为Watch 4 Pro 智能手表 99新',
+                                                                                                                category: '手机数码', price: 1899,
+                                                                                                                description: '用了两个月，换新表了所以出，全套配件齐全。',
+                                                                                                                seller: 'chaichong', createdAt: now - d * 1,
+                                                                                                                sold: false, images: [PRODUCT_IMAGES.p011],
+                                                                                                                wantCount: 67, condition: '99新',
+                                                                                                            tags: ['华为', '智能手表'] },
+                                                                                                            { id: 'p012', title: '柴渣虫专属好物 异色白菜价 包邮',
+                                                                                                                category: '其他', price: 10,
+                                                                                                                description: '全部异色，白菜价10元包邮，一周内发货。',
+                                                                                                                seller: 'chaichong', createdAt: now - d * 2,
+                                                                                                                sold: false, images: [PRODUCT_IMAGES.p012],
+                                                                                                                wantCount: 116, condition: '全新',
+                                                                                                            tags: ['特价', '包邮'] },
+                                                                                                            { id: 'p013', title: 'MacBook Air M2 2023款 8+256 星空色',
+                                                                                                                category: '手机数码', price: 6800,
+                                                                                                                description: '几乎全新，电池循环仅15次，带原装充电器。',
+                                                                                                                seller: 'dashu', createdAt: now - d * 2, sold: false,
+                                                                                                                images: [PRODUCT_IMAGES.p013], wantCount: 89,
+                                                                                                                condition: '99新', tags: ['苹果', '笔记本'] },
+                                                                                                            { id: 'p014', title: 'Gucci GG Marmont 链条包 经典款',
+                                                                                                                category: '奢侈品', price: 8800,
+                                                                                                                description: '正品Gucci链条包，使用一年，保养良好，带防尘袋。',
+                                                                                                                seller: 'huahua', createdAt: now - d * 6, sold: false,
+                                                                                                                images: [PRODUCT_IMAGES.p014], wantCount: 156,
+                                                                                                                condition: '9成新', tags: ['古驰', '包包'] },
+                                                                                                            { id: 'p015', title: 'AirPods Pro 2代 全新未拆封',
+                                                                                                                category: '数码配件', price: 1450,
+                                                                                                                description: '年会奖品，全新未拆封，带发票。',
+                                                                                                                seller: 'dashu', createdAt: now - d * 1, sold: false,
+                                                                                                                images: [PRODUCT_IMAGES.p015], wantCount: 203,
+                                                                                                                condition: '全新', tags: ['苹果', '耳机'] },
+                                                                                                            { id: 'p016', title: '佳能EOS R6 全画幅微单 快门3000',
+                                                                                                                category: '手机数码', price: 12500,
+                                                                                                                description: '专业级全画幅微单，快门仅3000次，送64G高速卡。',
+                                                                                                                seller: 'dashu', createdAt: now - d * 4, sold: false,
+                                                                                                                images: [PRODUCT_IMAGES.p016], wantCount: 45,
+                                                                                                                condition: '95新', tags: ['相机', '专业'] },
+                                                                                                            { id: 'p017', title: '劳力士蚝式恒动 41mm 蓝盘 全套',
+                                                                                                                category: '奢侈品', price: 52000,
+                                                                                                                description: '2023年购入，全套附件齐全，走时精准。',
+                                                                                                                seller: 'chaichong', createdAt: now - d * 12,
+                                                                                                                sold: false, images: [PRODUCT_IMAGES.p017],
+                                                                                                                wantCount: 312, condition: '99新',
+                                                                                                            tags: ['劳力士', '名表'] },
+                                                                                                            { id: 'p018', title: '乐高布加迪Chiron 42083 已组装',
+                                                                                                                category: '其他', price: 1800,
+                                                                                                                description: '绝版乐高，已组装展示，不缺件，送展示盒。',
+                                                                                                                seller: 'xiaoming', createdAt: now - d * 8,
+                                                                                                                sold: false, images: [PRODUCT_IMAGES.p018],
+                                                                                                                wantCount: 78, condition: '9成新',
+                                                                                                            tags: ['乐高', '绝版'] },
+                                                                                                            { id: 'p019', title: 'Yeezy 350 V2 黑天使 42码 全新',
+                                                                                                                category: '服装鞋帽', price: 2300,
+                                                                                                                description: '全新未试穿，购于官方渠道，带购买凭证。',
+                                                                                                                seller: 'chaichong', createdAt: now - d * 3,
+                                                                                                                sold: false, images: [PRODUCT_IMAGES.p019],
+                                                                                                                wantCount: 267, condition: '全新',
+                                                                                                            tags: ['椰子', '潮鞋'] },
+                                                                                                            { id: 'p020', title: 'Switch OLED 塞尔达限定版 99新',
+                                                                                                                category: '手机数码', price: 2100,
+                                                                                                                description: '塞尔达限定版，带底座和原装手柄，送塞尔达卡带。',
+                                                                                                                seller: 'xiaoming', createdAt: now - d * 5,
+                                                                                                                sold: false, images: [PRODUCT_IMAGES.p020],
+                                                                                                                wantCount: 189, condition: '99新',
+                                                                                                            tags: ['任天堂', '游戏机'] },
+                                                                                                            { id: 'p021', title: '香奈儿5号香水 100ml 全新',
+                                                                                                                category: '美妆护肤', price: 980,
+                                                                                                                description: '经典香奈儿5号，全新未拆，送礼佳品。',
+                                                                                                                seller: 'mama', createdAt: now - d * 4, sold: false,
+                                                                                                                images: [PRODUCT_IMAGES.p021], wantCount: 92,
+                                                                                                                condition: '全新', tags: ['香奈儿', '香水'] },
+                                                                                                            { id: 'p022', title: '博世冲击钻 家用工具箱套装',
+                                                                                                                category: '家具家电', price: 350,
+                                                                                                                description: '博世正品冲击钻，带多种钻头，只用过一次。',
+                                                                                                                seller: 'dashu', createdAt: now - d * 7, sold: false,
+                                                                                                                images: [PRODUCT_IMAGES.p022], wantCount: 34,
+                                                                                                                condition: '95新', tags: ['工具', '家用'] },
+                                                                                                            { id: 'p023', title: '万宝龙钢笔 大班系列 经典款',
+                                                                                                                category: '奢侈品', price: 3200,
+                                                                                                                description: '万宝龙大班经典款，F尖，书写顺滑，带原装盒。',
+                                                                                                                seller: 'chaichong', createdAt: now - d * 15,
+                                                                                                                sold: false, images: [PRODUCT_IMAGES.p023],
+                                                                                                                wantCount: 55, condition: '9成新',
+                                                                                                            tags: ['万宝龙', '钢笔'] },
+                                                                                                            { id: 'p024', title: 'Kindle Paperwhite 5 16G 水墨屏',
+                                                                                                                category: '图书音像', price: 680,
+                                                                                                                description: '几乎全新，屏幕完美，电池耐用，送保护壳。',
+                                                                                                                seller: 'mama', createdAt: now - d * 3, sold: false,
+                                                                                                                images: [PRODUCT_IMAGES.p024], wantCount: 43,
+                                                                                                                condition: '99新', tags: ['电子书', '阅读'] },
+                                                                                                            { id: 'p025', title: '北面1996羽绒服 经典款 黑色L码',
+                                                                                                                category: '服装鞋帽', price: 1800,
+                                                                                                                description: '北面经典款羽绒服，保暖效果一流，只穿一季。',
+                                                                                                                seller: 'dashu', createdAt: now - d * 9, sold: false,
+                                                                                                                images: [PRODUCT_IMAGES.p025], wantCount: 134,
+                                                                                                                condition: '95新', tags: ['北面', '羽绒服'] },
+                                                                                                            { id: 'p026', title: '大疆Mini 3 Pro无人机 畅飞套装',
+                                                                                                                category: '手机数码', price: 4200,
+                                                                                                                description: '畅飞套装，三块电池，飞行时间约20小时。',
+                                                                                                                seller: 'xiaoming', createdAt: now - d * 2,
+                                                                                                                sold: false, images: [PRODUCT_IMAGES.p026],
+                                                                                                                wantCount: 178, condition: '95新',
+                                                                                                            tags: ['无人机', '航拍'] },
+                                                                                                            { id: 'p027', title: '爱马仕丝巾 经典款 90cm方巾',
+                                                                                                                category: '奢侈品', price: 2800,
+                                                                                                                description: '爱马仕经典丝巾，配色优雅，送人自用皆宜。',
+                                                                                                                seller: 'mama', createdAt: now - d * 11, sold: false,
+                                                                                                                images: [PRODUCT_IMAGES.p027], wantCount: 89,
+                                                                                                                condition: '全新', tags: ['爱马仕', '丝巾'] },
+                                                                                                            { id: 'p028', title: 'PS5 光驱版 国行 双手柄套装',
+                                                                                                                category: '手机数码', price: 3200,
+                                                                                                                description: '国行PS5光驱版，带两个手柄，送3个游戏。',
+                                                                                                                seller: 'dashu', createdAt: now - d * 3, sold: false,
+                                                                                                                images: [PRODUCT_IMAGES.p028], wantCount: 245,
+                                                                                                                condition: '95新', tags: ['PS5', '游戏'] },
+                                                                                                            { id: 'p029', title: '蒂芙尼Tiffany Smile 项链 银款',
+                                                                                                                category: '奢侈品', price: 4500,
+                                                                                                                description: '蒂芙尼微笑项链，经典款，带原装盒和证书。',
+                                                                                                                seller: 'huahua', createdAt: now - d * 14,
+                                                                                                                sold: false, images: [PRODUCT_IMAGES.p029],
+                                                                                                                wantCount: 167, condition: '9成新',
+                                                                                                            tags: ['蒂芙尼', '项链'] },
+                                                                                                            { id: 'p030', title: '石头扫地机器人 G20 自清洁版',
+                                                                                                                category: '家具家电', price: 2800,
+                                                                                                                description: '石头旗舰扫地机器人，自清洁基站，用了一年。',
+                                                                                                                seller: 'mama', createdAt: now - d * 5, sold: false,
+                                                                                                                images: [PRODUCT_IMAGES.p030], wantCount: 98,
+                                                                                                                condition: '9成新', tags: ['扫地机', '智能'] }
+                                                                                                        ],
+                                                                                                        currentUserId: null,
+                                                                                                        searchHistory: [],
+                                                                                                        collectList: [],
+                                                                                                        reviewData: {},
+                                                                                                        chatMessages: {}
+                                                                                                    };
+                                                                                                }
+
+                                                                                                function loadData() {
+                                                                                                    try {
+                                                                                                        const raw = localStorage.getItem(STORAGE_KEY);
+                                                                                                        if (raw) {
+                                                                                                            const data = JSON.parse(raw);
+                                                                                                            if (!data.users) data.users = {};
+                                                                                                            if (!data.products) data.products = [];
+                                                                                                            if (!data.currentUserId) data
+                                                                                                                .currentUserId = null;
+                                                                                                            if (!data.searchHistory) data.searchHistory = [];
+                                                                                                            if (!data.collectList) data.collectList = [];
+                                                                                                            if (!data.reviewData) data.reviewData = {};
+                                                                                                            if (!data.chatMessages) data.chatMessages = {};
+                                                                                                            data.products.forEach(p => {
+                                                                                                                if (!p.images) p.images = [];
+                                                                                                                if (p.images.length === 0 && PRODUCT_IMAGES[
+                                                                                                                        p.id
+                                                                                                                    ]) p.images = [PRODUCT_IMAGES[p.id]];
+                                                                                                                if (!p.wantCount) p.wantCount = Math
+                                                                                                                    .floor(Math.random() * 50) + 1;
+                                                                                                                if (!p.condition) p.condition =
+                                                                                                                    '9成新';
+                                                                                                                if (!p.tags) p.tags = [];
+                                                                                                            });
+                                                                                                            searchHistory = data.searchHistory || [];
+                                                                                                            collectList = data.collectList || [];
+                                                                                                            reviewData = data.reviewData || {};
+                                                                                                            return data;
+                                                                                                        }
+                                                                                                    } catch (e) {}
+                                                                                                    const d = getDefaultData();
+                                                                                                    saveData(d);
+                                                                                                    return d;
+                                                                                                }
+
+                                                                                                function saveData(data) {
+                                                                                                    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(
+                                                                                                            data)); } catch (e) { showToast('存储空间不足'); }
+                                                                                                }
+
+                                                                                                let appData = loadData();
+                                                                                                let currentFilter = 'all';
+                                                                                                let currentSearch = '';
+                                                                                                let profileTabMode = 'buy';
+
+                                                                                                function getCurrentUser() { return appData.currentUserId ? appData.users[
+                                                                                                        appData.currentUserId] || null : null; }
+
+                                                                                                function saveAndRefresh() { saveData(appData);
+                                                                                                    renderProducts();
+                                                                                                    updateNavUI();
+                                                                                                    updateAssetChart(); }
+
+                                                                                                function showToast(msg, type = 'info') {
+                                                                                                    const container = document.getElementById('toastContainer');
+                                                                                                    const toast = document.createElement('div');
+                                                                                                    toast.className =
+                                                                                                        'toast-pop bg-gray-900 text-white px-5 py-2.5 rounded-full text-sm font-semibold shadow-lg mb-2 pointer-events-auto';
+                                                                                                    toast.textContent = msg;
+                                                                                                    container.appendChild(toast);
+                                                                                                    setTimeout(() => { if (toast.parentNode) toast.parentNode
+                                                                                                            .removeChild(toast); }, 2500);
+                                                                                                }
+
+                                                                                                function escapeHtml(s) { const d = document.createElement('div');
+                                                                                                    d.textContent = s; return d.innerHTML; }
+
+                                                                                                function formatTime(ts) {
+                                                                                                    const diff = Date.now() - ts;
+                                                                                                    if (diff < 6e4) return '刚刚';
+                                                                                                    if (diff < 36e5) return Math.floor(diff / 6e4) + '分钟前';
+                                                                                                    if (diff < 864e5) return Math.floor(diff / 36e5) + '小时前';
+                                                                                                    if (diff < 6048e5) return Math.floor(diff / 864e5) + '天前';
+                                                                                                    return new Date(ts).toLocaleDateString();
+                                                                                                }
+
+                                                                                                function updateNavUI() {
+                                                                                                    const user = getCurrentUser();
+                                                                                                    document.getElementById('navGuest').style.display = user ? 'none' : '';
+                                                                                                    document.getElementById('navUser').style.display = user ? '' : 'none';
+                                                                                                    if (user) {
+                                                                                                        const avatar = document.getElementById('navAvatar');
+                                                                                                        if (user.avatar) {
+                                                                                                            avatar.innerHTML =
+                                                                                                                `<img src="${user.avatar}" alt="头像" class="w-full h-full object-cover rounded-full">`;
+                                                                                                        } else {
+                                                                                                            avatar.textContent = (user.nickname || user
+                                                                                                                .username).charAt(0).toUpperCase();
+                                                                                                        }
+                                                                                                        document.getElementById('navUsername').textContent = user
+                                                                                                            .nickname || user.username;
+                                                                                                    }
+                                                                                                }
+
+                                                                                                function openModal(id) { document.getElementById(id).style.display =
+                                                                                                        'flex';
+                                                                                                    document.body.style.overflow = 'hidden'; }
+
+                                                                                                function closeModal(id) { document.getElementById(id).style.display =
+                                                                                                        'none';
+                                                                                                    document.body.style.overflow = ''; if (id === 'publishModal') {
+                                                                                                        uploadedImages = [];
+                                                                                                        renderImagePreview(); } }
+
+                                                                                                function openLoginModal() { closeModal('registerModal');
+                                                                                                    openModal('loginModal');
+                                                                                                    document.getElementById('loginError').style.display = 'none';
+                                                                                                    document.getElementById('loginUsername').value = '';
+                                                                                                    document.getElementById('loginPassword').value = ''; }
+
+                                                                                                function openRegisterModal() { closeModal('loginModal');
+                                                                                                    openModal('registerModal');
+                                                                                                    document.getElementById('registerError').style.display = 'none'; }
+
+                                                                                                function openPublishModal() { if (!getCurrentUser()) { showToast(
+                                                                                                        '请先登录');
+                                                                                                    openLoginModal(); return; }
+                                                                                                closeModal('detailModal');
+                                                                                                uploadedImages = [];
+                                                                                                renderImagePreview();
+                                                                                                document.getElementById('pubTitle').value = '';
+                                                                                                document.getElementById('pubCategory').value = '';
+                                                                                                document.getElementById('pubPrice').value = '';
+                                                                                                document.getElementById('pubDesc').value = '';
+                                                                                                document.getElementById('pubCondition').value = '全新';
+                                                                                                document.getElementById('publishError').style.display = 'none';
+                                                                                                openModal('publishModal'); }
+
+                                                                                                function openProfileModal() { if (!getCurrentUser()) { showToast(
+                                                                                                        '请先登录');
+                                                                                                    openLoginModal(); return; }
+                                                                                                openModal('profileModal');
+                                                                                                profileTabMode = 'buy';
+                                                                                                updateProfileUI();
+                                                                                                renderProfileContent();
+                                                                                                document.querySelectorAll('.profile-tab').forEach((t, i) => { if (i ===
+                                                                                                        0) { t.classList.add('text-text-main', 'font-semibold',
+                                                                                                            'border-gray-900');
+                                                                                                        t.classList.remove('text-text-light', 'font-medium',
+                                                                                                            'border-transparent'); } else { t.classList.add(
+                                                                                                            'text-text-light', 'font-medium',
+                                                                                                        'border-transparent');
+                                                                                                    t.classList.remove('text-text-main', 'font-semibold',
+                                                                                                        'border-gray-900'); } }); }
+
+                                                                                                function openDetailModal(id) { const p = appData.products.find(p => p.id ===
+                                                                                                        id); if (!p) return;
+                                                                                                    closeModal('profileModal');
+                                                                                                    openModal('detailModal');
+                                                                                                    renderDetailModal(p); }
+
+                                                                                                function switchToRegister() { closeModal('loginModal');
+                                                                                                    openRegisterModal(); }
+
+                                                                                                function switchToLogin() { closeModal('registerModal');
+                                                                                                    openLoginModal(); }
+
+                                                                                                document.addEventListener('click', e => { if (e.target.classList.contains(
+                                                                                                        'modal-overlay')) { const id = e.target.id; if (id && document
+                                                                                                        .getElementById(id)) closeModal(id); } });
+                                                                                                document.addEventListener('keydown', e => { if (e.key === 'Escape') {[
+                                                                                                        'loginModal', 'registerModal', 'publishModal',
+                                                                                                        'detailModal', 'profileModal', 'reviewModal'
+                                                                                                    ].forEach(id => { if (document.getElementById(id) && document
+                                                                                                            .getElementById(id).style.display === 'flex')
+                                                                                                        closeModal(id); }); } });
+
+                                                                                                function handleImageUpload(event) { const files = event.target.files; if (!files
+                                                                                                        .length) return; if (uploadedImages.length + files.length > 5) {
+                                                                                                        showToast('最多只能上传5张图片'); return; } for (let i = 0; i < files
+                                                                                                    .length; i++) { const file = files[i]; if (!file.type.startsWith(
+                                                                                                            'image/')) { showToast('只能上传图片文件'); continue; } const
+                                                                                                    reader = new FileReader();
+                                                                                                reader.onload = function(e) { uploadedImages.push(e.target.result);
+                                                                                                    renderImagePreview(); };
+                                                                                                reader.readAsDataURL(file); }
+                                                                                            event.target.value = ''; }
+
+                                                                                            function renderImagePreview() { const grid = document.getElementById(
+                                                                                                    'imagePreviewGrid'); const uploadArea = document.getElementById(
+                                                                                                    'imageUploadArea'); if (uploadedImages.length === 0) { grid
+                                                                                                    .innerHTML = '';
+                                                                                                uploadArea.style.display = 'block'; return; }
+                                                                                            uploadArea.style.display = uploadedImages.length >= 5 ? 'none' : 'block';
+                                                                                            grid.innerHTML = uploadedImages.map((img, index) => `
+        <div class="img-preview-item relative w-full pt-[100%] rounded-xl overflow-hidden bg-gray-100 shadow-sm">
+          <img src="${img}" alt="预览${index+1}" class="absolute top-0 left-0 w-full h-full object-cover">
+          <div class="absolute top-1 right-1 w-6 h-6 rounded-full bg-black/55 text-white flex items-center justify-center text-xs cursor-pointer btn-tap" onclick="event.stopPropagation();deleteImage(${index})"><i class="fa fa-times"></i></div>
+        </div>`).join(''); }
+
+                                                                                            function deleteImage(index) { uploadedImages.splice(index, 1);
+                                                                                                renderImagePreview(); }
+
+                                                                                            function login() { const username = document.getElementById('loginUsername').value
+                                                                                                    .trim(); const password = document.getElementById('loginPassword').value;
+                                                                                                const err = document.getElementById('loginError');
+                                                                                                err.style.display = 'none'; if (!username || !password) { err.textContent =
+                                                                                                    '请填写完整';
+                                                                                                err.style.display = 'block'; return; } const user = appData.users[username]; if (!
+                                                                                                    user) { err.textContent = '用户不存在';
+                                                                                                err.style.display = 'block'; return; } if (user.password !== password) { err
+                                                                                                    .textContent = '密码错误';
+                                                                                                err.style.display = 'block'; return; }
+                                                                                            appData.currentUserId = username;
+                                                                                            saveAndRefresh();
+                                                                                            closeModal('loginModal');
+                                                                                            showToast('登录成功 👋'); }
+
+                                                                                            function register() { const username = document.getElementById('regUsername').value
+                                                                                                    .trim(); const nickname = document.getElementById('regNickname').value
+                                                                                                    .trim(); const password = document.getElementById('regPassword').value;
+                                                                                                const password2 = document.getElementById('regPassword2').value; const err =
+                                                                                                    document.getElementById('registerError');
+                                                                                                err.style.display = 'none'; if (!username || !password || !password2) { err
+                                                                                                    .textContent = '请填写必填项';
+                                                                                                err.style.display = 'block'; return; } if (username.length < 3 || username.length >
+                                                                                                    16) { err.textContent = '用户名3-16字符';
+                                                                                                err.style.display = 'block'; return; } if (password.length < 6) { err
+                                                                                                    .textContent = '密码至少6位';
+                                                                                                err.style.display = 'block'; return; } if (password !== password2) { err
+                                                                                                    .textContent = '密码不一致';
+                                                                                                err.style.display = 'block'; return; } if (appData.users[username]) { err
+                                                                                                    .textContent = '用户名已存在';
+                                                                                                err.style.display = 'block'; return; }
+                                                                                            appData.users[username] = { username, password, nickname: nickname || username,
+                                                                                                createdAt: Date.now(), avatar: '', reputation: 5.0 };
+                                                                                            appData.currentUserId = username;
+                                                                                            saveAndRefresh();
+                                                                                            closeModal('registerModal');
+                                                                                            showToast('注册成功 🎉'); }
+
+                                                                                            function logout() { appData.currentUserId = null;
+                                                                                                saveAndRefresh();
+                                                                                                closeModal('profileModal');
+                                                                                                showToast('已退出');
+                                                                                                goHome(); }
+
+                                                                                            function publishProduct() { const user = getCurrentUser(); if (!user) return; const
+                                                                                                title = document.getElementById('pubTitle').value.trim(); const category =
+                                                                                                    document.getElementById('pubCategory').value; const price = parseFloat(
+                                                                                                    document.getElementById('pubPrice').value); const desc = document
+                                                                                                    .getElementById('pubDesc').value.trim(); const condition = document
+                                                                                                    .getElementById('pubCondition').value; const err = document.getElementById(
+                                                                                                    'publishError');
+                                                                                                err.style.display = 'none'; if (!title) { err.textContent = '请输入名称';
+                                                                                                    err.style.display = 'block'; return; } if (!category) { err.textContent =
+                                                                                                    '请选择分类';
+                                                                                                err.style.display = 'block'; return; } if (isNaN(price) || price < 0) { err
+                                                                                                    .textContent = '价格无效';
+                                                                                                err.style.display = 'block'; return; }
+                                                                                            appData.products.unshift({ id: 'p' + Date.now(), title, category, price: Math.round(
+                                                                                                    price * 100) / 100, description: desc || '暂无描述', seller: user
+                                                                                                    .username, createdAt: Date.now(), sold: false, images: [...uploadedImages],
+                                                                                                wantCount: 0, condition: condition || '全新', tags: [] });
+                                                                                            saveAndRefresh();
+                                                                                            closeModal('publishModal');
+                                                                                            showToast('发布成功 📦');
+                                                                                            goHome(); }
+
+                                                                                            function buyProduct(productId) { const user = getCurrentUser(); if (!user) {
+                                                                                                showToast('请先登录');
+                                                                                                closeModal('detailModal');
+                                                                                                openLoginModal(); return; } const product = appData.products.find(p => p.id ===
+                                                                                                    productId); if (!product || product.sold) { showToast('已售出'); return; } if (
+                                                                                                    product.seller === user.username) { showToast('不能购买自己的商品'); return; } if (!
+                                                                                                    confirm(
+                                                                                                        `确认购买「${product.title}」？\n价格：¥${product.price.toFixed(2)}\n卖家：${appData.users[product.seller]?.nickname || product.seller}`
+                                                                                                        )) return;
+                                                                                            product.sold = true;
+                                                                                            product.buyer = user.username;
+                                                                                            product.soldAt = Date.now();
+                                                                                            product.wantCount = (product.wantCount || 0) + 1;
+                                                                                            currentReviewProductId = productId;
+                                                                                            saveAndRefresh();
+                                                                                            closeModal('detailModal');
+                                                                                            showToast('购买成功 🎉');
+                                                                                            setTimeout(() => { if (confirm('是否现在评价本次交易？')) { openReviewModal(
+                                                                                                    productId); } }, 1500); }
+
+                                                                                            function openReviewModal(productId) { currentReviewProductId = productId;
+                                                                                                currentRating = 5;
+                                                                                                document.getElementById('reviewText').value = '';
+                                                                                                openModal('reviewModal');
+                                                                                                renderStarRating(); }
+
+                                                                                            function renderStarRating() { const container = document.getElementById('starRating');
+                                                                                                container.innerHTML = [1, 2, 3, 4, 5].map(i => `<i class="fa fa-star ${i<=currentRating?'text-amber-400':'text-gray-300'}" onclick="setRating(${i})" style="cursor:pointer;"></i>`
+                                                                                                    ).join('');
+                                                                                                container.querySelectorAll('.fa-star').forEach((star, i) => { star.addEventListener(
+                                                                                                        'mouseenter', () => { container.querySelectorAll('.fa-star')
+                                                                                                            .forEach((s, j) => { s.classList.toggle(
+                                                                                                                'text-amber-400', j <= i);
+                                                                                                                s.classList.toggle('text-gray-300', j >
+                                                                                                                    i); }); });
+                                                                                                    star.addEventListener('mouseleave', () => { container.querySelectorAll(
+                                                                                                            '.fa-star').forEach((s, j) => { s.classList.toggle(
+                                                                                                                'text-amber-400', j < currentRating);
+                                                                                                            s.classList.toggle('text-gray-300', j >=
+                                                                                                                currentRating); }); }); }); }
+
+                                                                                            function setRating(r) { currentRating = r;
+                                                                                                renderStarRating(); }
+
+                                                                                            function submitReview() { const text = document.getElementById('reviewText').value
+                                                                                                    .trim(); if (!currentReviewProductId) return; if (!reviewData[
+                                                                                                        currentReviewProductId]) reviewData[currentReviewProductId] = [];
+                                                                                                reviewData[currentReviewProductId].push({ rating: currentRating, text: text ||
+                                                                                                    '用户未留下文字评价', user: getCurrentUser()?.username || '匿名',
+                                                                                                    time: Date.now() });
+                                                                                                appData.reviewData = reviewData;
+                                                                                                saveData(appData);
+                                                                                                closeModal('reviewModal');
+                                                                                                showToast('评价提交成功 ⭐'); }
+
+                                                                                            function getFilteredProducts() { let products = [...appData.products]; if (
+                                                                                                    currentFilter !== 'all') products = products.filter(p => p.category ===
+                                                                                                    currentFilter); if (currentSearch) { const kw = currentSearch.toLowerCase();
+                                                                                                    products = products.filter(p => p.title.toLowerCase().includes(kw) || p
+                                                                                                        .category.includes(kw) || (p.description && p.description
+                                                                                                            .toLowerCase().includes(kw)) || (p.tags && p.tags.some(
+                                                                                                            t => t.toLowerCase().includes(kw)))); } if (currentSort ===
+                                                                                                    'newest') { products.sort((a, b) => b.createdAt - a.createdAt); } else if (
+                                                                                                    currentSort === 'price') { products.sort((a, b) => a.price - b.price); } else if (
+                                                                                                    currentSort === 'hot') { products.sort((a, b) => (b.wantCount || 0) - (a
+                                                                                                    .wantCount || 0)); } else { products.sort((a, b) => b.createdAt - a
+                                                                                                    .createdAt); } return products; }
+
+                                                                                            function renderProducts() { const allProducts = getFilteredProducts(); const
+                                                                                                totalPages = Math.ceil(allProducts.length / PRODUCTS_PER_PAGE); const
+                                                                                                products = allProducts.slice(0, currentPage * PRODUCTS_PER_PAGE); const grid =
+                                                                                                    document.getElementById('productGrid'); const loadMoreBtn = document
+                                                                                                    .getElementById('loadMoreBtn'); if (products.length === 0) { grid.innerHTML = `
+        <div class="empty-state col-span-2 text-center py-20 text-gray-400">
+          <i class="fa fa-inbox text-6xl block mb-4"></i><p class="text-base">暂无商品</p><p class="text-sm mt-1">去发布第一个宝贝吧</p>
+        </div>`;
+                                                                                                loadMoreBtn.classList.add('hidden'); return; }
+                                                                                            grid.innerHTML = products.map(p => { const sellerName = appData.users[p.seller]
+                                                                                                    ?.nickname || p.seller; const sellerAvatar = appData.users[p.seller]
+                                                                                                    ?.avatar || ''; const wantCount = p.wantCount || Math.floor(Math.random() *
+                                                                                                    50) + 1; const isFreeShipping = p.title.includes('包邮') || p.price >
+                                                                                                500; let imgContent = ''; if (p.images && p.images.length > 0) { imgContent =
+                                                                                                    `<img src="${p.images[0]}" alt="${escapeHtml(p.title)}" class="w-full h-full object-cover" loading="lazy">`; } else {
+                                                                                                    imgContent =
+                                                                                                        `<div class="w-full h-full flex items-center justify-center bg-gray-100 text-5xl text-gray-300"><i class="fa fa-cube"></i></div>`; }
+                                                                                                const timeStr = formatTime(p.createdAt); const conditionBadge = p.condition ===
+                                                                                                    '全新' ?
+                                                                                                    '<span class="absolute top-2 left-2 bg-green-500 text-white text-xs px-1.5 py-0.5 rounded-full font-medium">全新</span>' :
+                                                                                                    ''; return `
+        <div class="product-card bg-white rounded-2xl overflow-hidden shadow-card cursor-pointer" onclick="openDetailModal('${p.id}')">
+          <div class="img-container relative w-full pt-[100%] bg-gray-50">
+            ${imgContent}
+            ${p.sold ? '<div class="sold-overlay absolute inset-0 flex items-center justify-center"><span class="text-white font-bold text-lg tracking-widest bg-black/60 px-5 py-1.5 rounded-full">已售出</span></div>' : ''}
+            ${isFreeShipping && !p.sold ? '<span class="absolute top-2 left-2 bg-red-500 text-white text-xs px-2 py-0.5 rounded-full font-medium">包邮</span>' : ''}
+            ${conditionBadge}
+            <span class="absolute bottom-2 right-2 bg-black/50 text-white text-xs px-2 py-0.5 rounded-full">${timeStr}</span>
+          </div>
+          <div class="p-2.5">
+            <h3 class="text-sm font-medium text-text-main line-clamp-2 mb-2 leading-snug" style="min-height:2.5em;">${escapeHtml(p.title)}</h3>
+            <div class="flex items-baseline justify-between mb-2"><div class="text-lg font-extrabold text-danger"><span class="text-xs">¥</span>${p.price.toFixed(2)}</div><span class="text-xs text-text-light">${wantCount}人想要</span></div>
+            <div class="flex items-center gap-1.5 text-xs text-text-light"><div class="w-5 h-5 rounded-full bg-gray-200 flex items-center justify-center text-[10px] font-bold overflow-hidden flex-shrink-0">${sellerAvatar ? `<img src="${sellerAvatar}" alt="" class="w-full h-full object-cover">` : sellerName.charAt(0).toUpperCase()}</div><span class="truncate">${escapeHtml(sellerName)}</span></div>
+          </div>
+        </div>`; }).join('');
+                                                                                            if (currentPage < totalPages) { loadMoreBtn.classList.remove('hidden'); } else {
+                                                                                                loadMoreBtn.classList.add('hidden'); } }
+
+                                                                                            function loadMoreProducts() { currentPage++;
+                                                                                                renderProducts();
+                                                                                                showToast('加载更多宝贝...'); }
+
+                                                                                            function renderDetailModal(p) { const imgArea = document.getElementById(
+                                                                                                    'detailImgArea'); if (p.images && p.images.length > 0) { imgArea.innerHTML = `
+        <img src="${p.images[0]}" alt="${escapeHtml(p.title)}" class="w-full h-full object-cover">
+        ${p.sold ? '<div class="sold-overlay absolute inset-0 flex items-center justify-center"><span class="text-white font-bold text-xl tracking-widest bg-black/60 px-8 py-2 rounded-full">已售出</span></div>' : ''}`; } else {
+                                                                                                imgArea.innerHTML = `
+        <div class="w-full h-full flex items-center justify-center bg-gray-100 text-7xl text-gray-300"><i class="fa fa-cube"></i></div>
+        ${p.sold ? '<div class="sold-overlay absolute inset-0 flex items-center justify-center"><span class="text-white font-bold text-xl tracking-widest bg-black/60 px-8 py-2 rounded-full">已售出</span></div>' : ''}`; }
+                                                                                            document.getElementById('detailTitle').textContent = p.title;
+                                                                                            document.getElementById('detailPrice').textContent = p.price.toFixed(2);
+                                                                                            document.getElementById('detailCategory').textContent = p.category;
+                                                                                            document.getElementById('detailSeller').textContent = appData.users[p.seller]
+                                                                                                ?.nickname || p.seller;
+                                                                                            document.getElementById('detailDate').textContent = formatTime(p.createdAt);
+                                                                                            document.getElementById('detailCondition').textContent = p.condition || '9成新';
+                                                                                            document.getElementById('detailDesc').textContent = p.description || '暂无描述';
+                                                                                            const actions = document.getElementById('detailActions'); const user =
+                                                                                                getCurrentUser(); const wantCount = p.wantCount || Math.floor(Math.random() *
+                                                                                                30) + 1; const isCollected = collectList.includes(p.id); if (p.sold) {
+                                                                                                actions.innerHTML =
+                                                                                                    `<button class="btn-tap bg-gray-300 text-gray-500 w-full py-3.5 rounded-full font-semibold cursor-not-allowed" disabled>已售出 · ${wantCount}人想要</button>`; } else if (
+                                                                                                    user && p.seller === user.username) {
+                                                                                                actions.innerHTML =
+                                                                                                    `<button class="btn-tap border-2 border-gray-300 text-gray-500 w-full py-3.5 rounded-full font-semibold cursor-not-allowed" disabled>我的发布 · ${wantCount}人想要</button>`; } else {
+                                                                                                actions.innerHTML = `
+        <button class="btn-tap bg-gray-100 text-text-main py-3.5 rounded-full font-semibold flex-1 border border-gray-200 hover:bg-gray-200 transition" onclick="${isCollected?'removeCollect(\''+p.id+'\')':'addCollect(\''+p.id+'\')'}">
+          <i class="fa fa-star${isCollected?' text-amber-400':'-o'} mr-1"></i> ${isCollected?'已收藏':'收藏'}
+        </button>
+        <button class="btn-tap bg-gradient-hot text-white py-3.5 rounded-full font-semibold flex-[2] shadow-lg hover:shadow-xl transition" onclick="buyProduct('${p.id}')">立即购买 · ¥${p.price.toFixed(2)}</button>`; }
+                                                                                            const reviews = reviewData[p.id] || []; const reviewsHtml = reviews.length > 0 ?
+                                                                                                reviews.slice(-3).map(r => `
+        <div class="flex items-start gap-2 py-2"><span class="text-amber-400 text-xs">${'★'.repeat(r.rating)}</span><span class="text-xs text-text-secondary flex-1">${escapeHtml(r.text)}</span><span class="text-xs text-text-light">${formatTime(r.time)}</span></div>`).join('') :
+                                                                                                '<p class="text-xs text-gray-400 text-center py-2">暂无评价</p>';
+                                                                                            document.getElementById('detailReviews').innerHTML =
+                                                                                                `<h4 class="text-sm font-semibold mb-2">📝 交易评价 (${reviews.length})</h4>${reviewsHtml}`; }
+
+                                                                                            function addCollect(id) { if (!collectList.includes(id)) { collectList.push(id);
+                                                                                                    appData.collectList = collectList;
+                                                                                                    saveData(appData);
+                                                                                                    showToast('已收藏 ❤️');
+                                                                                                    renderDetailModal(appData.products.find(p => p.id === id)); } }
+
+                                                                                            function removeCollect(id) { collectList = collectList.filter(i => i !== id);
+                                                                                                appData.collectList = collectList;
+                                                                                                saveData(appData);
+                                                                                                showToast('已取消收藏');
+                                                                                                renderDetailModal(appData.products.find(p => p.id === id)); }
+
+                                                                                            function updateProfileUI() { const user = getCurrentUser(); if (!user) return; const
+                                                                                                avatar = document.getElementById('profileAvatar'); if (user.avatar) { avatar
+                                                                                                    .innerHTML =
+                                                                                                    `<img src="${user.avatar}" alt="头像" class="w-full h-full object-cover">`; } else {
+                                                                                                    avatar.textContent = (user.nickname || user.username).charAt(0)
+                                                                                                        .toUpperCase(); }
+                                                                                                document.getElementById('profileName').textContent = user.nickname || user
+                                                                                                    .username;
+                                                                                                document.getElementById('profileUsername').textContent = user.username;
+                                                                                                document.getElementById('profileRating').textContent = (user.reputation || 5.0)
+                                                                                                    .toFixed(1); }
+
+                                                                                            function switchProfileTab(mode, el) { profileTabMode = mode;
+                                                                                                document.querySelectorAll('.profile-tab').forEach(t => { t.classList.remove(
+                                                                                                        'text-text-main', 'font-semibold', 'border-gray-900');
+                                                                                                    t.classList.add('text-text-light', 'font-medium', 'border-transparent'); });
+                                                                                                el.classList.add('text-text-main', 'font-semibold', 'border-gray-900');
+                                                                                                el.classList.remove('text-text-light', 'font-medium', 'border-transparent');
+                                                                                                renderProfileContent(); }
+
+                                                                                            function renderProfileContent() { const user = getCurrentUser(); if (!user) return;
+                                                                                                const container = document.getElementById('profileTabContent'); if (
+                                                                                                    profileTabMode === 'buy') { const items = appData.products.filter(p => p
+                                                                                                        .buyer === user.username);
+                                                                                                container.innerHTML = items.length ? items.map(p => { let imgContent = ''; if (p
+                                                                                                        .images && p.images.length > 0) { imgContent =
+                                                                                                        `<img src="${p.images[0]}" alt="" class="w-full h-full object-cover">`; } else {
+                                                                                                        imgContent =
+                                                                                                            `<i class="fa fa-cube text-gray-300 text-2xl"></i>`; } return `
+        <div class="flex gap-3 p-3 border border-gray-100 rounded-2xl mb-2.5 items-center bg-gray-50 cursor-pointer btn-tap hover:bg-gray-100 transition" onclick="closeModal('profileModal');openDetailModal('${p.id}')">
+          <div class="w-14 h-14 rounded-xl overflow-hidden bg-gray-100 flex items-center justify-center flex-shrink-0 shadow-sm">${imgContent}</div>
+          <div class="flex-1 min-w-0"><b class="text-sm font-medium text-text-main block truncate">${escapeHtml(p.title)}</b><div class="text-xs text-text-light mt-1">¥${p.price.toFixed(2)} · ${formatTime(p.soldAt || p.createdAt)}</div></div>
+          <span class="text-xs text-success font-medium flex-shrink-0">已购</span></div>`; }).join('') :
+                                                                                                    '<p class="text-center text-gray-400 py-10">暂无订单</p>'; } else if (
+                                                                                                    profileTabMode === 'sell') { const items = appData.products.filter(p => p
+                                                                                                        .seller === user.username).sort((a, b) => b.createdAt - a.createdAt);
+                                                                                                container.innerHTML = items.length ? items.map(p => { let imgContent = ''; if (p
+                                                                                                        .images && p.images.length > 0) { imgContent =
+                                                                                                        `<img src="${p.images[0]}" alt="" class="w-full h-full object-cover">`; } else {
+                                                                                                        imgContent =
+                                                                                                            `<i class="fa fa-cube text-gray-300 text-2xl"></i>`; } return `
+        <div class="flex gap-3 p-3 border border-gray-100 rounded-2xl mb-2.5 items-center bg-gray-50 cursor-pointer btn-tap hover:bg-gray-100 transition" onclick="closeModal('profileModal');openDetailModal('${p.id}')">
+          <div class="w-14 h-14 rounded-xl overflow-hidden bg-gray-100 flex items-center justify-center flex-shrink-0 shadow-sm">${imgContent}</div>
+          <div class="flex-1 min-w-0"><b class="text-sm font-medium text-text-main block truncate">${escapeHtml(p.title)}</b><div class="text-xs text-text-light mt-1">¥${p.price.toFixed(2)} · ${formatTime(p.createdAt)}</div></div>
+          ${p.sold ? '<span class="text-xs text-danger font-medium flex-shrink-0">已售</span>' : '<span class="text-xs text-success font-medium flex-shrink-0">在售</span>'}</div>`; }).join('') :
+                                                                                                    '<p class="text-center text-gray-400 py-10">暂无发布</p>'; } else if (
+                                                                                                    profileTabMode === 'collect') { const items = appData.products.filter(p =>
+                                                                                                        collectList.includes(p.id));
+                                                                                                container.innerHTML = items.length ? items.map(p => { let imgContent = ''; if (p
+                                                                                                        .images && p.images.length > 0) { imgContent =
+                                                                                                        `<img src="${p.images[0]}" alt="" class="w-full h-full object-cover">`; } else {
+                                                                                                        imgContent =
+                                                                                                            `<i class="fa fa-cube text-gray-300 text-2xl"></i>`; } return `
+        <div class="flex gap-3 p-3 border border-gray-100 rounded-2xl mb-2.5 items-center bg-gray-50 cursor-pointer btn-tap hover:bg-gray-100 transition" onclick="closeModal('profileModal');openDetailModal('${p.id}')">
+          <div class="w-14 h-14 rounded-xl overflow-hidden bg-gray-100 flex items-center justify-center flex-shrink-0 shadow-sm">${imgContent}</div>
+          <div class="flex-1 min-w-0"><b class="text-sm font-medium text-text-main block truncate">${escapeHtml(p.title)}</b><div class="text-xs text-text-light mt-1">¥${p.price.toFixed(2)} · ${p.sold?'已售出':'在售'}</div></div>
+          <span class="text-xs text-amber-500 font-medium flex-shrink-0 cursor-pointer" onclick="event.stopPropagation();removeCollect('${p.id}');renderProfileContent();">取消</span></div>`; }).join('') :
+                                                                                                    '<p class="text-center text-gray-400 py-10">暂无收藏</p>'; } }
+
+                                                                                            function switchTab(tab, el) { document.querySelectorAll('.tab-item').forEach(t => { t
+                                                                                                    .classList.remove('active'); });
+                                                                                                el.classList.add('active');
+                                                                                                currentPage = 1; if (tab === 'all') { currentFilter = 'all';
+                                                                                                    currentSort = 'default'; } else if (tab === 'newest') { currentFilter =
+                                                                                                    'all';
+                                                                                                currentSort = 'newest'; } else { currentFilter = tab;
+                                                                                                currentSort = 'default'; }
+                                                                                            document.getElementById('listTitle').innerHTML =
+                                                                                                `<i class="fa fa-shopping-bag text-primary-dark"></i><span>${tab==='all'?'推荐宝贝':tab==='newest'?'最新宝贝':tab}</span>`;
+                                                                                            updateCategoryActiveState();
+                                                                                            renderProducts(); }
+
+                                                                                            function filterByCategory(cat, el) { currentFilter = cat;
+                                                                                                currentSort = 'default';
+                                                                                                currentPage = 1;
+                                                                                            document.getElementById('listTitle').innerHTML =
+                                                                                                `<i class="fa fa-shopping-bag text-primary-dark"></i><span>${cat==='all'?'全部宝贝':cat}</span>`;
+                                                                                            updateCategoryActiveState();
+                                                                                            updateTabActiveState(cat);
+                                                                                            renderProducts(); }
+
+                                                                                            function updateCategoryActiveState() { document.querySelectorAll('.cat-entry').forEach(
+                                                                                                    i => { const iconWrap = i.querySelector('.cat-icon-wrap'); const span = i
+                                                                                                        .querySelector('span'); if (iconWrap) { iconWrap.classList.remove(
+                                                                                                            'bg-yellow-100', 'shadow-md');
+                                                                                                        iconWrap.classList.add('bg-gray-50', 'shadow-sm'); } if (span) { span
+                                                                                                            .classList.remove('text-text-main', 'font-bold');
+                                                                                                            span.classList.add('text-text-secondary', 'font-medium'); } }); const
+                                                                                                    activeCat = document.querySelector(`.cat-entry[data-cat="${currentFilter}"]`); if (
+                                                                                                    activeCat) { const iconWrap = activeCat.querySelector('.cat-icon-wrap'); const
+                                                                                                        span = activeCat.querySelector('span'); if (iconWrap) { iconWrap.classList
+                                                                                                            .remove('bg-gray-50', 'shadow-sm');
+                                                                                                        iconWrap.classList.add('bg-yellow-100', 'shadow-md'); } if (span) { span
+                                                                                                            .classList.remove('text-text-secondary', 'font-medium');
+                                                                                                            span.classList.add('text-text-main', 'font-bold'); } } }
+
+                                                                                            function updateTabActiveState(cat) { document.querySelectorAll('.tab-item').forEach(
+                                                                                                    t => { t.classList.remove('active'); }); const tabMap = { 'all': '推荐',
+                                                                                                    '手机数码': '数码', '服装鞋帽': '服饰', '家具家电': '家电', '美妆护肤': '美妆', '运动户外': '运动',
+                                                                                                    '图书音像': '图书', '母婴用品': '母婴', '奢侈品': '奢品', '数码配件': '配件' }; const tabText =
+                                                                                                    tabMap[cat] || cat; const matchingTab = Array.from(document.querySelectorAll(
+                                                                                                    '.tab-item')).find(t => t.textContent.trim() === tabText); if (matchingTab)
+                                                                                                    matchingTab.classList.add('active'); }
+
+                                                                                            function sortProducts(type) { currentSort = type;
+                                                                                                currentPage = 1;
+                                                                                            document.getElementById('listTitle').innerHTML =
+                                                                                                `<i class="fa fa-shopping-bag text-primary-dark"></i><span>${type==='newest'?'最新宝贝':type==='price'?'价格排序':type==='hot'?'热门宝贝':'推荐宝贝'}</span>`;
+                                                                                            renderProducts(); }
+
+                                                                                            function searchProducts() { currentSearch = document.getElementById('searchInput')
+                                                                                                    .value.trim();
+                                                                                                currentPage = 1; const titleEl = document.getElementById('listTitle'); if (
+                                                                                                    currentSearch) { titleEl.innerHTML =
+                                                                                                    `<i class="fa fa-search text-primary-dark"></i><span>搜索: ${escapeHtml(currentSearch)}</span>`; if (!searchHistory.includes(
+                                                                                                        currentSearch)) { searchHistory.unshift(currentSearch); if (
+                                                                                                        searchHistory.length > 10) searchHistory.pop();
+                                                                                                    appData.searchHistory = searchHistory;
+                                                                                                    saveData(appData);
+                                                                                                    renderSearchHistory(); } } else { titleEl.innerHTML =
+                                                                                                    `<i class="fa fa-shopping-bag text-primary-dark"></i><span>${currentFilter==='all'?'推荐宝贝':currentFilter}</span>`; }
+                                                                                            renderProducts();
+                                                                                            document.getElementById('searchHistoryDropdown').classList.add('hidden'); }
+
+                                                                                            function clearSearchHistory() { searchHistory = [];
+                                                                                                appData.searchHistory = [];
+                                                                                                saveData(appData);
+                                                                                                renderSearchHistory();
+                                                                                                document.getElementById('searchHistoryDropdown').classList.add('hidden');
+                                                                                                showToast('搜索历史已清空'); }
+
+                                                                                            function renderSearchHistory() { const container = document.getElementById(
+                                                                                                    'searchHistoryList'); if (searchHistory.length === 0) { container.innerHTML =
+                                                                                                    '<span class="text-xs text-gray-400">暂无搜索记录</span>'; return; }
+                                                                                                container.innerHTML = searchHistory.map(h => `
+        <span class="bg-gray-100 text-text-secondary px-2.5 py-1 rounded-full text-xs cursor-pointer btn-tap" onclick="document.getElementById('searchInput').value='${escapeHtml(h)}';searchProducts();">${escapeHtml(h)}</span>`).join(''); }
+
+                                                                                            document.getElementById('searchInput').addEventListener('input', function() { clearTimeout(
+                                                                                                    this._timer);
+                                                                                                this._timer = setTimeout(searchProducts, 300); if (this.value.trim() &&
+                                                                                                    searchHistory.length > 0) { document.getElementById(
+                                                                                                        'searchHistoryDropdown').classList.remove('hidden'); } else { document
+                                                                                                    .getElementById('searchHistoryDropdown').classList.add('hidden'); } });
+                                                                                            document.getElementById('searchInput').addEventListener('focus', function() { if (
+                                                                                                    searchHistory.length > 0 && !this.value.trim()) { document.getElementById(
+                                                                                                        'searchHistoryDropdown').classList.remove('hidden'); } });
+                                                                                            document.addEventListener('click', function(e) { if (!e.target.closest(
+                                                                                                    '#searchInput') && !e.target.closest('#searchHistoryDropdown')) {
+                                                                                                    document.getElementById('searchHistoryDropdown').classList.add(
+                                                                                                        'hidden'); } });
+
+                                                                                            function goHome() { currentFilter = 'all';
+                                                                                                currentSearch = '';
+                                                                                                currentSort = 'default';
+                                                                                                currentPage = 1;
+                                                                                            document.getElementById('searchInput').value = '';
+                                                                                            document.getElementById('listTitle').innerHTML =
+                                                                                                '<i class="fa fa-shopping-bag text-primary-dark"></i><span>推荐宝贝</span>';
+                                                                                            document.querySelectorAll('.tab-item').forEach(t => { t.classList.remove(
+                                                                                                'active'); }); const recTab = document.querySelector(
+                                                                                                '.tab-item[data-tab="all"]'); if (recTab) recTab.classList.add('active');
+                                                                                            updateCategoryActiveState();
+                                                                                            updateBottomNavActive('navHome');
+                                                                                            renderProducts();
+                                                                                            window.scrollTo({ top: 0, behavior: 'smooth' });
+                                                                                            closeWalletPage();
+                                                                                            closeChatPage();
+                                                                                            closeDiscoverPage(); }
+
+                                                                                            function updateBottomNavActive(activeId) {['navHome', 'navDiscover', 'navMsg',
+                                                                                                    'navProfile'
+                                                                                                ].forEach(id => { const el = document.getElementById(id); if (!el) return; const
+                                                                                                    icon = el.querySelector('.nav-icon'); const label = el.querySelector(
+                                                                                                        '.nav-label'); if (id === activeId) { el.classList.add('active'); if (
+                                                                                                        icon) { icon.style.color = '#FFD161'; } if (label) { label.style.color =
+                                                                                                        '#222';
+                                                                                                    label.style.fontWeight = '700'; } } else { el.classList.remove('active'); if (
+                                                                                                        icon) { icon.style.color = '#9CA3AF'; } if (label) { label.style.color =
+                                                                                                        '#9CA3AF';
+                                                                                                    label.style.fontWeight = '500'; } } }); }
+
+                                                                                            function init() { appData = loadData();
+                                                                                                searchHistory = appData.searchHistory || [];
+                                                                                                collectList = appData.collectList || [];
+                                                                                                reviewData = appData.reviewData || {};
+                                                                                                updateNavUI();
+                                                                                                renderProducts();
+                                                                                                renderSearchHistory(); if (Object.keys(appData.users).length === 0 && appData
+                                                                                                    .products.length === 0) { appData = getDefaultData();
+                                                                                                    saveData(appData);
+                                                                                                    renderProducts();
+                                                                                                    updateNavUI(); }
+                                                                                                updateBottomNavActive('navHome');
+                                                                                                updateAssetChart();
+                                                                                                document.querySelector('.tab-item[data-tab="all"]')?.classList.add('active');
+                                                                                                updateCategoryActiveState(); }
+
+                                                                                            let walletBalance = 12845;
+
+                                                                                            function openWalletPage() { document.getElementById('walletPage').style.display =
+                                                                                                    'block';
+                                                                                                document.body.style.overflow = 'hidden';
+                                                                                                updateWalletBalance();
+                                                                                                updateAssetChart(); }
+
+                                                                                            function closeWalletPage() { document.getElementById('walletPage').style.display =
+                                                                                                    'none';
+                                                                                                document.body.style.overflow = ''; }
+
+                                                                                            function updateWalletBalance() { const balance = walletBalance.toFixed(2);
+                                                                                                document.getElementById('walletBalance').innerText = balance;
+                                                                                                document.getElementById('walletAvailable').innerText = balance; }
+
+                                                                                            function updateAssetChart() { const chart = document.getElementById('assetChart'); if (!chart ||
+                                                                                                    chart.style.display === 'none') return; const heights = [30, 45, 25, 55, 40,
+                                                                                                    60, 35, 50, 65, 45, 55, 70
+                                                                                                ]; chart.innerHTML = heights.map((h, i) =>
+                                                                                                    `<div class="chart-bar flex-1 bg-[#FCD535]/60 rounded-t-sm hover:bg-[#FCD535]/90 transition-all cursor-pointer" style="height:${h}%;min-width:4px;" title="第${i+1}日"></div>`
+                                                                                                    ).join(''); }
+
+                                                                                            function rechargeBalance() { const amount = prompt('请输入充值金额'); if (!amount)
+                                                                                                return; const num = parseFloat(amount); if (isNaN(num) || num <= 0) { showToast(
+                                                                                                    '金额错误'); return; }
+                                                                                            walletBalance += num;
+                                                                                            updateWalletBalance();
+                                                                                            addTransaction('余额充值', '+¥' + num.toFixed(2), '#0ECB81', 'fa-money');
+                                                                                            showToast('充值成功'); }
+
+                                                                                            function withdrawBalance() { const amount = prompt('请输入提现金额'); if (!amount)
+                                                                                                return; const num = parseFloat(amount); if (isNaN(num) || num <= 0) { showToast(
+                                                                                                    '金额错误'); return; } if (num > walletBalance) { showToast('余额不足'); return; }
+                                                                                            walletBalance -= num;
+                                                                                            updateWalletBalance();
+                                                                                            addTransaction('余额提现', '-¥' + num.toFixed(2), '#F6465D', 'fa-credit-card');
+                                                                                            showToast('提现成功'); }
+
+                                                                                            function addTransaction(title, amount, color, icon) { const list = document.getElementById(
+                                                                                                    'transactionList'); const html = `
+        <div class="glass-card rounded-2xl p-4 flex items-center justify-between animate-fade-in-up">
+          <div class="flex items-center gap-3"><div class="w-12 h-12 rounded-xl flex items-center justify-center" style="background:${color}20;color:${color}"><i class="fa ${icon}"></i></div><div><div class="font-semibold">${title}</div><div class="text-sm text-gray-400">刚刚</div></div></div>
+          <div class="font-bold" style="color:${color}">${amount}</div>
+        </div>`; list.insertAdjacentHTML('afterbegin', html); }
+
+                                                                                            function openChatPage() { document.getElementById('chatPage').style.display =
+                                                                                                    'block';
+                                                                                                document.body.style.overflow = 'hidden';
+                                                                                                updateBottomNavActive('navMsg'); }
+
+                                                                                            function closeChatPage() { document.getElementById('chatPage').style.display = 'none';
+                                                                                                document.body.style.overflow = ''; }
+
+                                                                                            function openDiscoverPage() { document.getElementById('discoverPage').style.display =
+                                                                                                    'block';
+                                                                                                document.body.style.overflow = 'hidden';
+                                                                                                updateBottomNavActive('navDiscover'); }
+
+                                                                                            function closeDiscoverPage() { document.getElementById('discoverPage').style.display =
+                                                                                                    'none';
+                                                                                                document.body.style.overflow = ''; }
+
+                                                                                            document.getElementById('navHome')?.addEventListener('click', () => { goHome();
+                                                                                                updateBottomNavActive('navHome'); });
+                                                                                            document.getElementById('navDiscover')?.addEventListener('click', () => {
+                                                                                                openDiscoverPage();
+                                                                                                updateBottomNavActive('navDiscover'); });
+                                                                                            document.getElementById('navMsg')?.addEventListener('click', () => {
+                                                                                                openChatPage();
+                                                                                                updateBottomNavActive('navMsg'); });
+                                                                                            document.getElementById('navProfile')?.addEventListener('click', () => { if (
+                                                                                                    getCurrentUser()) { openProfileModal(); } else { openLoginModal(); }
+                                                                                                updateBottomNavActive('navProfile'); });
+
+                                                                                            init();
+                                                                                            console.log('🚀 闲物交易平台 v5.0 增强版已启动');
+                                                                                            console.log('📊 商品总数:', appData.products.length);
+                                                                                            console.log('👥 用户总数:', Object.keys(appData.users).length);
+                                                                                            console.log('💎 钱包余额: ¥' + walletBalance.toFixed(2));
+                                                                                            console.log('⭐ 收藏数量:', collectList.length);
+                                                                                            console.log('📝 评价数量:', Object.values(reviewData).flat().length);
+                                                                                            console.log('🔍 搜索历史:', searchHistory.length, '条');
+                                                                                            console.log('📦 存储键:', STORAGE_KEY);
+                                                                                            console.log('🎯 当前每页显示:', PRODUCTS_PER_PAGE, '个商品');
+                                                                                            console.log('✅ 所有系统就绪，祝交易愉快！');
+</script>
+</body>
+</html>
